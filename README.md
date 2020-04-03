@@ -12,3 +12,7 @@ Temat 11: Gra w kółko i krzyżyk\
   
 Snake_case, 
 
+
+Instalacja:
+
+`pip install -r requirements.txt`
