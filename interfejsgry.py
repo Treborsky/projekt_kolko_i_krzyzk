@@ -2,21 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-import time
-import random
+import os
 
-pygame.init()
+#pygame.init()
 pygame.font.init()
+
+def sciezkaDoImg(plik):
+    return os.path.abspath(os.path.join("./img/", plik))
 
 #okno gry
 scr_width = 800
 scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
-win = pygame.image.load('back_tic_tac_toe.png')
+win = pygame.image.load(sciezkaDoImg('back_tic_tac_toe.png'))
 
 #grafika przycisków
-but_main = pygame.image.load('button1to.png')
-but_high = pygame.image.load('button4osz.png')
+but_main = pygame.image.load(sciezkaDoImg('button1to.png'))
+but_high = pygame.image.load(sciezkaDoImg('button4osz.png'))
 #nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
@@ -25,8 +27,9 @@ white = (255, 255, 255)
 
 clock = pygame.time.Clock()
 
-
-
+# constants
+EVENT_MOUSEBUTTONDOWN = 5
+EVENT_QUIT = 12
 
 #klasa do tworzenia przycisków
 class Button(object):
@@ -53,23 +56,23 @@ class Button(object):
     def clicked(self):
 
         if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
-            if self.button_down == False and self.action != None:
+            if self.button_down == False and self.action is not None:
                 if self.click[0] == 1:
                     button_down = True
                     self.action()
                 if self.click[0] == 0:
                     self.button_down = False
-            elif self.button_down == True:
+            elif self.button_down:
                 self.button_down = False
 
 
     #wyświetlenie testu na ekranie
     def message_display(self, screen):
         font = pygame.font.SysFont('comicsans', 25)
-        TextSurface = font.render(self.text, True, white)
-        TextRect = TextSurface.get_rect()
-        TextRect.center = ((self.x + (self.width / 2)), (self.y + (self.height / 2)))
-        screen.blit(TextSurface, TextRect)
+        text_surface = font.render(self.text, True, white)
+        text_rect = text_surface.get_rect()
+        text_rect.center = ((self.x + (self.width / 2)), (self.y + (self.height / 2)))
+        screen.blit(text_surface, text_rect)
 
 #ekran główny
 def game_intro():
@@ -77,8 +80,7 @@ def game_intro():
 
     while intro:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
 
         screen.blit(win, (0, 0))
@@ -100,10 +102,9 @@ def game_menu_3x3():
 
     while run:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 220 + 60 > pos[1] > 60:
                     plansza_3()
@@ -128,10 +129,9 @@ def game_menu_4x4():
 
     while run:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 300 + 60 > pos[1] > 60:
                     plansza_4()
@@ -155,10 +155,9 @@ def game_menu_5x5():
 
     while run:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 380 + 60 > pos[1] > 60:
                     plansza_5()
@@ -182,8 +181,7 @@ def plansza_3():
 
     while game:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
 
         screen.blit(win, (0,0))
@@ -195,8 +193,7 @@ def plansza_4():
 
     while game:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
 
         screen.blit(win, (0,0))
@@ -209,8 +206,7 @@ def plansza_5():
 
     while game:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+            if event.type == EVENT_QUIT:
                 quit()
 
         screen.blit(win, (0,0))
@@ -225,5 +221,4 @@ game_menu_3x3()
 game_menu_4x4()
 game_menu_5x5()
 plansza_3()
-pygame.quit()
 quit()
