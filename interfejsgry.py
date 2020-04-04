@@ -4,7 +4,7 @@
 import pygame
 import os
 
-#pygame.init()
+pygame.init()
 pygame.font.init()
 
 def sciezkaDoImg(plik):
@@ -19,6 +19,9 @@ win = pygame.image.load(sciezkaDoImg('back_tic_tac_toe.png'))
 #grafika przycisków
 but_main = pygame.image.load(sciezkaDoImg('button1to.png'))
 but_high = pygame.image.load(sciezkaDoImg('button4osz.png'))
+#grafika planszy
+plansza = pygame.image.load("./Plansze/Plansza_3x3_v1.png")
+
 #nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
@@ -28,12 +31,10 @@ white = (255, 255, 255)
 clock = pygame.time.Clock()
 
 # constants
-EVENT_MOUSEBUTTONDOWN = 5
-EVENT_QUIT = 12
 
 #klasa do tworzenia przycisków
 class Button(object):
-    def __init__(self, x, y, width, height, text, action = None):
+    def __init__(self, x, y, width, height, text, action=None):
         self.x = x
         self.y = y
         self.width = width
@@ -58,7 +59,7 @@ class Button(object):
         if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
             if self.button_down == False and self.action is not None:
                 if self.click[0] == 1:
-                    button_down = True
+                    self.button_down = True
                     self.action()
                 if self.click[0] == 0:
                     self.button_down = False
@@ -80,8 +81,9 @@ def game_intro():
 
     while intro:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
+                break
 
         screen.blit(win, (0, 0))
 
@@ -102,9 +104,11 @@ def game_menu_3x3():
 
     while run:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
-            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
+                break
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 220 + 60 > pos[1] > 60:
                     plansza_3()
@@ -113,7 +117,7 @@ def game_menu_3x3():
         screen.blit(win, (0, 0))
         button1 = Button(290, 220, 210, 60, 'Normal')
         button2 = Button(290, 300, 210, 60, 'Play with computer', plansza_3)
-        button3 = Button(290, 380, 210, 60, 'Game time', None)
+        button3 = Button(290, 380, 210, 60, 'Game time', plansza_3)
         button4 = Button(290, 460, 210, 60, 'Return', game_intro)
 
         button1.message_display(screen)
@@ -129,9 +133,11 @@ def game_menu_4x4():
 
     while run:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
-            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
+                break
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 300 + 60 > pos[1] > 60:
                     plansza_4()
@@ -155,9 +161,11 @@ def game_menu_5x5():
 
     while run:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
-            if event.type == EVENT_MOUSEBUTTONDOWN and event.button == 1:
+                break
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 if 290 + 210 > pos[0] > 290 and 380 + 60 > pos[1] > 60:
                     plansza_5()
@@ -181,10 +189,12 @@ def plansza_3():
 
     while game:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
+                break
 
-        screen.blit(win, (0,0))
+
+        screen.blit(plansza, (0, 0))
 
         pygame.display.update()
         clock.tick(20)
@@ -193,10 +203,12 @@ def plansza_4():
 
     while game:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
+                break
 
-        screen.blit(win, (0,0))
+
+        screen.blit(win, (0, 0))
 
         pygame.display.update()
         clock.tick(20)
@@ -206,7 +218,7 @@ def plansza_5():
 
     while game:
         for event in pygame.event.get():
-            if event.type == EVENT_QUIT:
+            if event.type == pygame.QUIT:
                 quit()
 
         screen.blit(win, (0,0))
@@ -221,4 +233,5 @@ game_menu_3x3()
 game_menu_4x4()
 game_menu_5x5()
 plansza_3()
+pygame.quit()
 quit()
