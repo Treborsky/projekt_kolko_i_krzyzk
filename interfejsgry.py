@@ -172,6 +172,7 @@ def game_menu_5x5():
         pygame.display.update()
         clock.tick(20)
 
+
 def plansza_3():
     game = True
 
@@ -179,6 +180,9 @@ def plansza_3():
         quit_program()
 
         screen.blit(pygame.transform.scale(grafika_plansza_3x3, (800, 600)), (0, 0))
+
+        # przyciski dla planszy 3x3
+
 
         pygame.display.update()
         clock.tick(20)
@@ -199,7 +203,7 @@ def plansza_5():
     while game:
         quit_program()
 
-        screen.blit(win, (0,0))
+        screen.blit(win, (0, 0))
 
         pygame.display.update()
         clock.tick(20)
