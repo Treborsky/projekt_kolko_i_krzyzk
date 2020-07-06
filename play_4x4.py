@@ -1,142 +1,150 @@
-board = ["-", "-", "-", "-",
-         "-", "-", "-", "-",
-         "-", "-", "-", "-",
-         "-", "-", "-", "-",
-         ]
+#board = [[0, 0, 0, 0],
+#         [0, 0, 0, 0],
+#         [0, 0, 0, 0],
+#         [0, 0, 0, 0]]
 
 
 class Game4x4(object):
 
+    def __init__(self, board):
+        self.player_points = 0
+        self.comp_points = 0
+        self.nr_of_turn = 1
+        self.board = board
+
     # sprawdzanie kolumn
     def column(self):
 
-        for nr_column in range(4):
+        for nr_col in range(4):
+            total = 0
 
-            o = 0
-            x = 0
+            for nr_row in range(4):
+                total = total + self.board[nr_row][nr_col]
 
-            for unit in range(4):
+            if self.nr_of_turn % 2 == 1:
+                if total == 4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
-                if board[(unit * 4) + nr_column] == "o":
-                    o += 1
+                if total == -4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
+            else:
+                if total == -4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
-                if board[(unit * 4) + nr_column] == "x":
-                    x += 1
-
-                if (o > 1) and (x > 1):
-                    break
-
-            if o == 4:
-                print("Player1 wins")
-                quit()
-
-            if x == 4:
-                print("Player2 wins")
-                quit()
-
+                if total == 4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
     # sprawdzanie wierszy
     def rows(self):
 
-        for nr_rows in range(4):
+        for nr_row in range(4):
+            total = 0
 
-            o = 0
-            x = 0
+            for nr_col in range(4):
+                total = total + self.board[nr_row][nr_col]
 
-            for unit in range(4):
+            if self.nr_of_turn % 2 == 1:
+                if total == 4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
-                if board[unit + (nr_rows * 4)] == "o":
-                    o += 1
+                if total == -4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
+            else:
+                if total == -4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
-                if board[unit + (nr_rows * 4)] == "x":
-                    x += 1
-
-                if (o > 1) and (x > 1):
-                    break
-
-            if o == 4:
-                print("Player1 wins")
-                quit()
-
-            if x == 4:
-                print("Player2 wins")
-                quit()
+                if total == 4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
     # sprawdzanie skosow
     def slant(self):
+        total_1 = 0
+        total_2 = 0
 
-        x = 0
-        o = 0
+        for nr_slant in range(4):
+            total_1 = total_1 + self.board[nr_slant][nr_slant]
 
-        x2 = 0
-        o2 = 0
+        for nr_row, nr_col in zip(range(4), range(3, -1, -1)):
+            total_2 = total_2 + self.board[nr_row][nr_col]
 
-        for i in range(4):
+        if self.nr_of_turn % 2 == 1:
+            if total_1 == 4 or total_2 == 4:
+                self.player_points = self.player_points + 1
+                self.nr_of_turn = self.nr_of_turn + 1
+                quit()
 
-            if board[i + (i * 4)] == "o":
-                o += 1
+            if total_1 == -4 or total_2 == -4:
+                self.comp_points = self.comp_points + 1
+                self.nr_of_turn = self.nr_of_turn + 1
+                quit()
+        else:
+            if total_1 == -4 or total_2 == -4:
+                self.player_points = self.player_points + 1
+                self.nr_of_turn = self.nr_of_turn + 1
+                quit()
 
-            if board[i + (i * 4)] == "x":
-                x += 1
-
-            if (o > 1) and (x > 1):
-                break
-
-        for j in range(3, 7, 3):
-
-            if board[j] == "o":
-                o2 += 1
-
-            if board[j] == "x":
-                x2 += 1
-
-            if (o2 > 1) and (x2 > 1):
-                break
-
-        if o == 4 or o2 == 4:
-            print("Player1 wins")
-            quit()
-
-        if x == 4 or x2 == 4:
-            print("Player2 wins")
-            quit()
+            if total_1 == 4 or total_2 == 4:
+                self.comp_points = self.comp_points + 1
+                self.nr_of_turn = self.nr_of_turn + 1
+                quit()
 
     # sprawdzanie kwadratow
     def square(self):
-        for k in range(3):
 
-            for i in range(3):
-                o = 0
-                x = 0
+        for nr_row in range(3):
+            total_1 = 0
+            total_2 = 0
+            total_3 = 0
 
-                for j in range(2):
-                    if board[j + i + (4 * k)] == "o":
-                        o += 1
+            for nr_col in range(2):
+                total_1 = total_1 + self.board[nr_row][nr_col] + self.board[nr_row + 1][nr_col]
 
-                    if board[j + 4 + i + (4 * k)] == "o":
-                        o += 1
+            for nr_col in range(1, 3):
+                total_2 = total_2 + self.board[nr_row][nr_col] + self.board[nr_row + 1][nr_col]
 
-                    if board[j + i + (4 * k)] == "x":
-                        x += 1
+            for nr_col in range(2, 4):
+                total_3 = total_3 + self.board[nr_row][nr_col] + self.board[nr_row + 1][nr_col]
 
-                    if board[j + 4 + i + (4 * k)] == "x":
-                        x += 1
-
-                    if (o > 1) and (x > 1):
-                        break
-
-                if o == 4:
-                    print("Player1 wins")
+            if self.nr_of_turn % 2 == 1:
+                if total_1 == 4 or total_2 == 4 or total_3 == 4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
                     quit()
 
-                if x == 4:
-                    print("Player2 wins")
+                if total_1 == -4 or total_2 == -4 or total_3 == -4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
+            else:
+                if total_1 == -4 or total_2 == -4 or total_3 == -4:
+                    self.player_points = self.player_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
                     quit()
 
+                if total_1 == 4 or total_2 == 4 or total_3 == 4:
+                    self.comp_points = self.comp_points + 1
+                    self.nr_of_turn = self.nr_of_turn + 1
+                    quit()
 
-    # ogolna funkcja sprawdzajaca wszystkie mozliwosci
-    def check(self, column, rows, slant, square):
-        column()
-        rows()
-        slant()
-        square()
+    # funkcja sprawdzajaca wszystkie mozliwosci
+    def check(self):
+        Game4x4.rows(self)
+        Game4x4.column(self)
+        Game4x4.slant(self)
+        Game4x4.square(self)
