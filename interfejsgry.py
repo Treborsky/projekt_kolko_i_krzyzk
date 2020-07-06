@@ -4,12 +4,15 @@
 import pygame
 import os
 import sys
+import board3x3 as x3
 
 pygame.init()
 pygame.font.init()
 
+
 def sciezkaDoImg(plik):
     return os.path.abspath(os.path.join("./img/", plik))
+
 
 def quit_program():
     for event in pygame.event.get():
@@ -18,29 +21,33 @@ def quit_program():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
 
-#okno gry
+# okno gry
 scr_width = 800
 scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
 win = pygame.image.load(sciezkaDoImg('back_tic_tac_toe.png'))
 
-#grafika przycisków
+# grafika przycisków
 but_main = pygame.image.load(sciezkaDoImg('button1to.png'))
 but_high = pygame.image.load(sciezkaDoImg('button4osz.png'))
-#grafika planszy
+# grafika planszy
 grafika_plansza_3x3 = pygame.image.load("./Plansze/Plansza_3x3_v1.png")
 grafika_plansza_4x4 = pygame.image.load("./Plansze/plansza_4x4.png")
 
-#nazwa okna gry
+# grafika figur
+crosssource = pygame.image.load("Plansze/x_3x3.png")
+circlesource = pygame.image.load("Plansze/o_3x3.png")
+
+# nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
-#colors
+# colors
 white = (255, 255, 255)
 
 clock = pygame.time.Clock()
 
 
-#klasa do tworzenia przycisków
+# klasa do tworzenia przycisków
 class Button(object):
     def __init__(self, x, y, width, height, text, action=None):
         self.x = x
@@ -52,7 +59,7 @@ class Button(object):
         self.action = action
         self.button_down = False
 
-    #rysowanie przycisku i podświetlanie
+    # rysowanie przycisku i podświetlanie
         self.click = pygame.mouse.get_pressed()
         self.mouse = pygame.mouse.get_pos()
         if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
@@ -63,7 +70,7 @@ class Button(object):
         self.clicked()
         self.message_display(screen)
 
-    #funkcja klikanie
+    # funkcja klikanie
     def clicked(self):
 
         if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
@@ -76,8 +83,7 @@ class Button(object):
             elif self.button_down:
                 self.button_down = False
 
-
-    #wyświetlenie testu na ekranie
+    # wyświetlenie tekstu na ekranie
     def message_display(self, screen):
         font = pygame.font.SysFont('comicsans', 25)
         text_surface = font.render(self.text, True, white)
@@ -85,7 +91,8 @@ class Button(object):
         text_rect.center = ((self.x + (self.width / 2)), (self.y + (self.height / 2)))
         screen.blit(text_surface, text_rect)
 
-#ekran główny
+
+# ekran główny
 def game_intro():
     intro = True
 
@@ -98,9 +105,9 @@ def game_intro():
         button2 = Button(290, 300, 210, 60, '4x4', game_menu_4x4)
         button3 = Button(290, 380, 210, 60, '5x5', game_menu_5x5)
 
-
         pygame.display.update()
         clock.tick(20)
+
 
 def game_menu_3x3():
     run = True
@@ -126,6 +133,7 @@ def game_menu_3x3():
         pygame.display.update()
         clock.tick(20)
 
+
 def game_menu_4x4():
     run = True
 
@@ -148,6 +156,7 @@ def game_menu_4x4():
 
         pygame.display.update()
         clock.tick(20)
+
 
 def game_menu_5x5():
     run = True
@@ -176,16 +185,30 @@ def game_menu_5x5():
 def plansza_3():
     game = True
 
+    board = x3.ThreeBoard()
+
     while game:
         quit_program()
 
         screen.blit(pygame.transform.scale(grafika_plansza_3x3, (800, 600)), (0, 0))
 
-        # przyciski dla planszy 3x3
+        figures = board.get_elements
 
+        for figure in figures:
+            if figure[0] == 1:
+                screen.blit(pygame.transform.scale(circlesource, (87, 87)), figure[1])
+            if figure[0] == -1:
+                screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
+
+        for event in pygame.event.get(pygame.MOUSEBUTTONDOWN):
+            if event.button == 1:
+                pos = pygame.mouse.get_pos()
+                board.add_figure(pos[0], pos[1])
 
         pygame.display.update()
         clock.tick(20)
+
+
 def plansza_4():
     game = True
 
@@ -196,6 +219,7 @@ def plansza_4():
 
         pygame.display.update()
         clock.tick(20)
+
 
 def plansza_5():
     game = True
