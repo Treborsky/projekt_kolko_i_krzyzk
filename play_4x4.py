@@ -1,7 +1,7 @@
-#board = [[0, 0, 0, 0],
-#         [0, 0, 0, 0],
-#         [0, 0, 0, 0],
-#         [0, 0, 0, 0]]
+#board = [[-1, 0, 0, 0],
+#         [-1, 0, 0, 0],
+#         [-1, 0, 0, 0],
+#         [-1, 0, 0, 0]]
 
 
 class Game4x4(object):
@@ -22,25 +22,26 @@ class Game4x4(object):
                 total = total + self.board[nr_row][nr_col]
 
             if self.nr_of_turn % 2 == 1:
-                if total == 4:
+                if total == -4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total == -4:
+                if total == 4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
+
             else:
-                if total == -4:
+                if total == 4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total == 4:
+                if total == -4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
     # sprawdzanie wierszy
     def rows(self):
@@ -52,25 +53,26 @@ class Game4x4(object):
                 total = total + self.board[nr_row][nr_col]
 
             if self.nr_of_turn % 2 == 1:
-                if total == 4:
+                if total == -4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total == -4:
+                if total == 4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
+
             else:
-                if total == -4:
+                if total == 4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total == 4:
+                if total == -4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
     # sprawdzanie skosow
     def slant(self):
@@ -84,25 +86,26 @@ class Game4x4(object):
             total_2 = total_2 + self.board[nr_row][nr_col]
 
         if self.nr_of_turn % 2 == 1:
-            if total_1 == 4 or total_2 == 4:
+            if total_1 == -4 or total_2 == -4:
                 self.player_points = self.player_points + 1
                 self.nr_of_turn = self.nr_of_turn + 1
-                quit()
+                return
 
-            if total_1 == -4 or total_2 == -4:
+            if total_1 == 4 or total_2 == 4:
                 self.comp_points = self.comp_points + 1
                 self.nr_of_turn = self.nr_of_turn + 1
-                quit()
+                return
+
         else:
-            if total_1 == -4 or total_2 == -4:
+            if total_1 == 4 or total_2 == 4:
                 self.player_points = self.player_points + 1
                 self.nr_of_turn = self.nr_of_turn + 1
-                quit()
+                return
 
-            if total_1 == 4 or total_2 == 4:
+            if total_1 == -4 or total_2 == -4:
                 self.comp_points = self.comp_points + 1
                 self.nr_of_turn = self.nr_of_turn + 1
-                quit()
+                return
 
     # sprawdzanie kwadratow
     def square(self):
@@ -122,25 +125,26 @@ class Game4x4(object):
                 total_3 = total_3 + self.board[nr_row][nr_col] + self.board[nr_row + 1][nr_col]
 
             if self.nr_of_turn % 2 == 1:
-                if total_1 == 4 or total_2 == 4 or total_3 == 4:
+                if total_1 == -4 or total_2 == -4 or total_3 == -4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total_1 == -4 or total_2 == -4 or total_3 == -4:
+                if total_1 == 4 or total_2 == 4 or total_3 == 4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
+
             else:
-                if total_1 == -4 or total_2 == -4 or total_3 == -4:
+                if total_1 == 4 or total_2 == 4 or total_3 == 4:
                     self.player_points = self.player_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
-                if total_1 == 4 or total_2 == 4 or total_3 == 4:
+                if total_1 == -4 or total_2 == -4 or total_3 == -4:
                     self.comp_points = self.comp_points + 1
                     self.nr_of_turn = self.nr_of_turn + 1
-                    quit()
+                    return
 
     # funkcja sprawdzajaca wszystkie mozliwosci
     def check(self):
