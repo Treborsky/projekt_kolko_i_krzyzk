@@ -124,8 +124,8 @@ class FourBoard:
 
 class FiveBoard:
     matrix: List[List[int]] = [[0 for x in range(0, 5)] for y in range(0, 5)]
-    x_dimensions__: List[Tuple[int, int]] = [(143, 269), (280, 394), (407, 517), (529, 654)]
-    y_dimensions__: List[Tuple[int, int]] = [(51, 171), (182, 295), (306, 415), (426, 545)]
+    x_dimensions__: List[Tuple[int, int]] = [(124, 225), (236, 331), (342, 438), (450, 546), (557, 659)]
+    y_dimensions__: List[Tuple[int, int]] = [(17, 118), (129, 227), (239, 338), (349, 447), (459, 561)]
     figure_list: List = []
 
     def __init__(self):
