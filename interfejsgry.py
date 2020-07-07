@@ -107,6 +107,7 @@ def game_intro():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 def game_menu_3x3():
@@ -132,6 +133,7 @@ def game_menu_3x3():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 def game_menu_4x4():
@@ -156,6 +158,7 @@ def game_menu_4x4():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 def game_menu_5x5():
@@ -180,6 +183,7 @@ def game_menu_5x5():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 def plansza_3():
@@ -200,13 +204,21 @@ def plansza_3():
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
-        for event in pygame.event.get(pygame.MOUSEBUTTONDOWN):
-            if event.button == 1:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                board.add_figure(pos[0], pos[1])
+                try:
+                    board.add_figure(pos[0], pos[1])
+                except ValueError as error:
+                    print(error)
+                    break
+                except IndexError as error:
+                    print(error)
+                    break
 
         pygame.display.update()
-        clock.tick(20)
+        clock.tick(80)
+    pass
 
 
 def plansza_4():
@@ -219,6 +231,7 @@ def plansza_4():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 def plansza_5():
@@ -231,6 +244,7 @@ def plansza_5():
 
         pygame.display.update()
         clock.tick(20)
+    pass
 
 
 #mian loop

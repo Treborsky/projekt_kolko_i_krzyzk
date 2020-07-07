@@ -22,6 +22,9 @@ class ThreeBoard:
                 x = i
             if self.y_dimensions__[i][0] < y_mouse_position < self.y_dimensions__[i][1]:
                 y = i
+            else:
+                raise ValueError
+        print(x, y)
         return x, y
 
     def re_translate_pos(self, x, y) -> Tuple[int, int]:
@@ -30,10 +33,14 @@ class ThreeBoard:
 
     def add_figure(self, x_mouse_position, y_mouse_position) -> None:
         # updates the state of the matrix and switches form x's to o's and the other way round
-        xs, ys = self.translate_pos(x_mouse_position, y_mouse_position)
-        self.update_elements(xs, ys)
-        self.state = not self.state
-        pass
+        try:
+            xs, ys = self.translate_pos(x_mouse_position, y_mouse_position)
+            self.update_elements(xs, ys)
+            self.state = not self.state
+        except ValueError:
+            raise ValueError
+        else:
+            raise IndexError
 
     def update_elements(self, i, j) -> None:
         # updates the matrix and adds the new figure to the list of figures for display
@@ -42,7 +49,12 @@ class ThreeBoard:
                 self.matrix[i][j] = 1
             elif self.state is False:
                 self.matrix[i][j] = -1
-        self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
+            else:
+                raise ValueError
+        if len(self.figure_list) <= 9:
+            self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
+        else:
+            raise IndexError
         pass
 
     @property
