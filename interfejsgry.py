@@ -4,7 +4,9 @@
 import pygame
 import os
 import sys
-from fgraph import ThreeBoard as X3
+from fgraph import ThreeBoard as Xthree
+from fgraph import FourBoard as Xfour
+from fgraph import FiveBoard as Xfive
 
 pygame.init()
 pygame.font.init()
@@ -33,6 +35,7 @@ but_high = pygame.image.load(sciezkaDoImg('button4osz.png'))
 # grafika planszy
 grafika_plansza_3x3 = pygame.image.load("./Plansze/Plansza_3x3_v1.png")
 grafika_plansza_4x4 = pygame.image.load("./Plansze/plansza_4x4.png")
+grafika_plansza_5x5 = pygame.image.load("./Plansze/plansza_5x5.PNG")
 
 # grafika figur
 crosssource = pygame.image.load("Plansze/x_3x3.png")
@@ -189,7 +192,7 @@ def game_menu_5x5():
 def plansza_3():
     game = True
 
-    board = X3()
+    board = Xthree()
 
     while game:
 
@@ -201,19 +204,21 @@ def plansza_3():
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
-        # event handling
+        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
         for event in pygame.event.get():
+            # interfacing with the board
             if event.type == pygame.MOUSEBUTTONDOWN:
                 try:
                     pos = pygame.mouse.get_pos()
                     if event.button == 1:
                         board.add_figure(pos[0], pos[1])
                 except ValueError as error:
-                    print(error)
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
                     continue
                 except IndexError as error:
-                    print(error)
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
                     continue
+            # game exit
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -227,10 +232,37 @@ def plansza_3():
 def plansza_4():
     game = True
 
+    board = Xfour()
+
     while game:
-        quit_program()
 
         screen.blit(pygame.transform.scale(grafika_plansza_4x4, (800, 600)), (0, 0))
+
+        for figure in board.get_elements:
+            if figure[0] == 1:
+                screen.blit(pygame.transform.scale(circlesource, (87, 87)), figure[1])
+            if figure[0] == -1:
+                screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
+
+        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
+        for event in pygame.event.get():
+            # interfacing with the board
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                try:
+                    pos = pygame.mouse.get_pos()
+                    if event.button == 1:
+                        board.add_figure(pos[0], pos[1])
+                except ValueError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+                except IndexError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+            # game exit
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                sys.exit()
 
         pygame.display.update()
         clock.tick(20)
@@ -240,10 +272,37 @@ def plansza_4():
 def plansza_5():
     game = True
 
-    while game:
-        quit_program()
+    board = Xfive()
 
-        screen.blit(win, (0, 0))
+    while game:
+
+        screen.blit(pygame.transform.scale(grafika_plansza_5x5, (800, 600)), (0, 0))
+
+        for figure in board.get_elements:
+            if figure[0] == 1:
+                screen.blit(pygame.transform.scale(circlesource, (80, 80)), figure[1])
+            if figure[0] == -1:
+                screen.blit(pygame.transform.scale(crosssource, (80, 80)), figure[1])
+
+        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
+        for event in pygame.event.get():
+            # interfacing with the board
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                try:
+                    pos = pygame.mouse.get_pos()
+                    if event.button == 1:
+                        board.add_figure(pos[0], pos[1])
+                except ValueError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+                except IndexError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+            # game exit
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                sys.exit()
 
         pygame.display.update()
         clock.tick(20)
