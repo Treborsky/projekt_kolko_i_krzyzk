@@ -192,13 +192,11 @@ def plansza_3():
     board = x3.ThreeBoard()
 
     while game:
-        quit_program()
+        #quit_program()
 
         screen.blit(pygame.transform.scale(grafika_plansza_3x3, (800, 600)), (0, 0))
 
-        figures = board.get_elements
-
-        for figure in figures:
+        for figure in board.get_elements:
             if figure[0] == 1:
                 screen.blit(pygame.transform.scale(circlesource, (87, 87)), figure[1])
             if figure[0] == -1:
@@ -206,18 +204,23 @@ def plansza_3():
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
+                #try:
                 pos = pygame.mouse.get_pos()
-                try:
+                if event.button == 1:
                     board.add_figure(pos[0], pos[1])
-                except ValueError as error:
-                    print(error)
-                    break
-                except IndexError as error:
-                    print(error)
-                    break
+                #except ValueError:
+                 #   continue
+                #except IndexError:
+                 #   continue
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                sys.exit()
+
 
         pygame.display.update()
-        clock.tick(80)
+        clock.tick(100)
+
     pass
 
 
