@@ -110,7 +110,7 @@ class FourBoard:
         else:
             raise ValueError("already filled")
 
-        if len(self.figure_list) <= 9:
+        if len(self.figure_list) <= 16:
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
         else:
             raise IndexError("plansza pelna")
