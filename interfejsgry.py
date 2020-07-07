@@ -4,7 +4,7 @@
 import pygame
 import os
 import sys
-import board3x3 as x3
+from fgraph import ThreeBoard as X3
 
 pygame.init()
 pygame.font.init()
@@ -189,10 +189,9 @@ def game_menu_5x5():
 def plansza_3():
     game = True
 
-    board = x3.ThreeBoard()
+    board = X3()
 
     while game:
-        #quit_program()
 
         screen.blit(pygame.transform.scale(grafika_plansza_3x3, (800, 600)), (0, 0))
 
@@ -202,25 +201,26 @@ def plansza_3():
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
+        # event handling
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #try:
-                pos = pygame.mouse.get_pos()
-                if event.button == 1:
-                    board.add_figure(pos[0], pos[1])
-                #except ValueError:
-                 #   continue
-                #except IndexError:
-                 #   continue
+                try:
+                    pos = pygame.mouse.get_pos()
+                    if event.button == 1:
+                        board.add_figure(pos[0], pos[1])
+                except ValueError as error:
+                    print(error)
+                    continue
+                except IndexError as error:
+                    print(error)
+                    continue
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
 
-
         pygame.display.update()
         clock.tick(100)
-
     pass
 
 

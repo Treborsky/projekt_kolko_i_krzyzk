@@ -49,13 +49,13 @@ class ThreeBoard:
                 self.matrix[i][j] = 1
             elif self.state is False:
                 self.matrix[i][j] = -1
-            #else:
-             #   raise ValueError
+            else:
+                raise ValueError("already filled")
         if len(self.figure_list) <= 9:
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
-        #else:
-         #   raise IndexError
-        #pass
+        else:
+            raise IndexError("")
+        pass
 
     @property
     def get_elements(self) -> List:
