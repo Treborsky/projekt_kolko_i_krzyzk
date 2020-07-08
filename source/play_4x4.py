@@ -150,7 +150,7 @@ class Game4x4(object):
                     return
 
     # funkcja sprawdzajaca wszystkie mozliwosci
-    def check(self):
+    def check(self):# TODO: niech funkcja zwraca -1 dla wygranej krzyżyka i 1 dla wygranej kółka, a 0 dla remisu
         Game4x4.rows(self)
         Game4x4.column(self)
         Game4x4.slant(self)

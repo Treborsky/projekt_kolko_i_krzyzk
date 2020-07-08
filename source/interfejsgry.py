@@ -17,7 +17,6 @@ def quit_program():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
 
-
 # okno gry
 scr_width = 800
 scr_hight = 600
@@ -40,7 +39,7 @@ clock = pygame.time.Clock()
 
 
 # ekran główny
-def game_intro():
+def game_intro(n: None = None):
     intro = True
 
     while intro:
@@ -60,7 +59,6 @@ def game_intro():
 
 
 def game_menu(n: int = None):
-    print(n)
 
     def start(m: int = None):
         plansza(n, m)
@@ -128,5 +126,5 @@ def plansza(n: int = None, m: int = None):
 
 # mian loop
 def main_loop():
-    game_intro()
+    game_intro(None)
     sys.exit()

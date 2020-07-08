@@ -73,7 +73,7 @@ class SingleGameScore:
         out_str += self.board_size + 'x' + self.board_size
         out_str += self.str_all_moves()
         return out_str
-        pass
+    pass
 
 
 class GameHistory:

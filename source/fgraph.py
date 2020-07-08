@@ -72,7 +72,7 @@ class Board:
         else:
             raise ValueError("already filled")
 
-        if len(self.figure_list) <= 25:
+        if len(self.figure_list) <= self.size*self.size:
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
         else:
             raise IndexError("plansza pelna")
