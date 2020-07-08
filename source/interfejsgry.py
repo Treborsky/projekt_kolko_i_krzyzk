@@ -4,15 +4,10 @@
 import pygame
 import os
 import sys
-from source import fgraph, play_4x4
-
+from source import fgraph, play_4x4, game_statistics, buttons
+from typing import Tuple
 
 pygame.init()
-pygame.font.init()
-
-
-def sciezkaDoImg(plik):
-    return os.path.abspath(os.path.join("./img/", plik))
 
 
 def quit_program():
@@ -22,15 +17,13 @@ def quit_program():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
 
+
 # okno gry
 scr_width = 800
 scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
-win = pygame.image.load(sciezkaDoImg('back_tic_tac_toe.png'))
+win = pygame.image.load(buttons.sciezka_do_img('back_tic_tac_toe.png'))
 
-# grafika przycisków
-but_main = pygame.image.load(sciezkaDoImg('button1to.png'))
-but_high = pygame.image.load(sciezkaDoImg('button4osz.png'))
 # grafika planszy
 grafika_plansza_3x3 = pygame.image.load("./Plansze/Plansza_3x3_v1.png")
 grafika_plansza_4x4 = pygame.image.load("./Plansze/plansza_4x4.png")
@@ -43,55 +36,7 @@ circlesource = pygame.image.load("Plansze/o_3x3.png")
 # nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
-# colors
-white = (255, 255, 255)
-
 clock = pygame.time.Clock()
-
-
-# klasa do tworzenia przycisków
-class Button(object):
-    def __init__(self, x, y, width, height, text, action=None):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.color_font = white
-        self.text = text
-        self.action = action
-        self.button_down = False
-
-    # rysowanie przycisku i podświetlanie
-        self.click = pygame.mouse.get_pressed()
-        self.mouse = pygame.mouse.get_pos()
-        if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
-            screen.blit(but_high, (self.x, self.y))
-        else:
-            screen.blit(but_main, (self.x, self.y))
-
-        self.clicked()
-        self.message_display(screen)
-
-    # funkcja klikanie
-    def clicked(self):
-
-        if self.x + self.width > self.mouse[0] > self.x and self.y + self.height > self.mouse[1] > self.y:
-            if self.button_down == False and self.action is not None:
-                if self.click[0] == 1:
-                    self.button_down = True
-                    self.action()
-                if self.click[0] == 0:
-                    self.button_down = False
-            elif self.button_down:
-                self.button_down = False
-
-    # wyświetlenie tekstu na ekranie
-    def message_display(self, screen):
-        font = pygame.font.SysFont('comicsans', 25)
-        text_surface = font.render(self.text, True, white)
-        text_rect = text_surface.get_rect()
-        text_rect.center = ((self.x + (self.width / 2)), (self.y + (self.height / 2)))
-        screen.blit(text_surface, text_rect)
 
 
 # ekran główny
@@ -103,95 +48,48 @@ def game_intro():
 
         screen.blit(win, (0, 0))
 
-        button1 = Button(290, 220, 210, 60, '3x3', game_menu_3x3)
-        button2 = Button(290, 300, 210, 60, '4x4', game_menu_4x4)
-        button3 = Button(290, 380, 210, 60, '5x5', game_menu_5x5)
+        button1 = buttons.Button(290, 220, 210, 60, '3x3', game_menu, 3)
+        button2 = buttons.Button(290, 300, 210, 60, '4x4', game_menu, 4)
+        button3 = buttons.Button(290, 380, 210, 60, '5x5', game_menu, 5)
+
+        intro = not (button1.button_down or button2.button_down or button3.button_down)
 
         pygame.display.update()
-        clock.tick(20)
+        clock.tick(100)
     pass
 
 
-def game_menu_3x3():
+def game_menu(n: int = None):
+    print(n)
+
+    def start(m: int = None):
+        plansza(n, m)
+
     run = True
 
-    while run:
+    pygame.time.wait(100)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                pos = pygame.mouse.get_pos()
-                if 290 + 210 > pos[0] > 290 and 220 + 60 > pos[1] > 60:
-                    plansza_3()
+    while run:
+        quit_program()
 
         screen.blit(win, (0, 0))
-        button1 = Button(290, 220, 210, 60, 'Normal')
-        button2 = Button(290, 300, 210, 60, 'Play with computer', plansza_3)
-        button3 = Button(290, 380, 210, 60, 'Game time', plansza_3)
-        button4 = Button(290, 460, 210, 60, 'Return', game_intro)
+
+        button1 = buttons.Button(290, 220, 210, 60, 'Normal', start, 1)
+        button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', start, 2)
+        button3 = buttons.Button(290, 380, 210, 60, 'Game time', start, 3)
+        button4 = buttons.Button(290, 460, 210, 60, 'Return', game_intro)
+
+        run = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
 
         pygame.display.update()
-        clock.tick(20)
+        clock.tick(100)
     pass
 
 
-def game_menu_4x4():
-    run = True
-
-    while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                pos = pygame.mouse.get_pos()
-                if 290 + 210 > pos[0] > 290 and 300 + 60 > pos[1] > 60:
-                    plansza_4()
-
-        screen.blit(win, (0, 0))
-        button1 = Button(290, 220, 210, 60, 'Normal', plansza_4)
-        button2 = Button(290, 300, 210, 60, 'Play with computer')
-        button3 = Button(290, 380, 210, 60, 'Game time', plansza_4)
-        button4 = Button(290, 460, 210, 60, 'Return', game_intro)
-
-        pygame.display.update()
-        clock.tick(20)
-    pass
-
-
-def game_menu_5x5():
-    run = True
-
-    while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                pos = pygame.mouse.get_pos()
-                if 290 + 210 > pos[0] > 290 and 380 + 60 > pos[1] > 60:
-                    plansza_5()
-
-        screen.blit(win, (0, 0))
-        button1 = Button(290, 220, 210, 60, 'Normal', None)
-        button2 = Button(290, 300, 210, 60, 'Play with computer', None)
-        button3 = Button(290, 380, 210, 60, 'Game time')
-        button4 = Button(290, 460, 210, 60, 'Return', game_intro)
-
-        pygame.display.update()
-        clock.tick(20)
-    pass
-
-
-def plansza_3():
+def plansza(n: int = None, m: int = None):
     game = True
 
-    board = fgraph.ThreeBoard()
+    board = fgraph.Board(n)
 
     while game:
 
@@ -207,121 +105,28 @@ def plansza_3():
         for event in pygame.event.get():
             # interfacing with the board
             if event.type == pygame.MOUSEBUTTONDOWN:
-                try:
-                    pos = pygame.mouse.get_pos()
-                    if event.button == 1:
-                        board.add_figure(pos[0], pos[1])
-                except ValueError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-                except IndexError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
+                # try:
+                pos = pygame.mouse.get_pos()
+                if event.button == 1:
+                    board.add_figure(pos[0], pos[1])
+                # except ValueError as error:
+                # print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                # continue
+                # except IndexError as error:
+                # print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                # continue
             # game exit
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
-
-        #sprawdzanie wygranej
-
 
         pygame.display.update()
         clock.tick(100)
     pass
 
 
-def plansza_4():
-    game = True
-
-    board = fgraph.FourBoard()
-
-    while game:
-
-        screen.blit(pygame.transform.scale(grafika_plansza_4x4, (800, 600)), (0, 0))
-
-        for figure in board.get_elements:
-            if figure[0] == 1:
-                screen.blit(pygame.transform.scale(circlesource, (87, 87)), figure[1])
-            if figure[0] == -1:
-                screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
-
-        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
-        for event in pygame.event.get():
-            # interfacing with the board
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                try:
-                    pos = pygame.mouse.get_pos()
-                    if event.button == 1:
-                        board.add_figure(pos[0], pos[1])
-                except ValueError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-                except IndexError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-            # game exit
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                sys.exit()
-
-        # sprawdzanie wygranej
-        board_check = play_4x4.Game4x4(board.matrix)
-        winner = board_check.check()
-        if winner == 1:
-            print()
-        elif winner == -1:
-            print()
-        else:
-            print()
-
-        pygame.display.update()
-        clock.tick(20)
-    pass
-
-
-def plansza_5():
-    game = True
-
-    board = fgraph.FiveBoard()
-
-    while game:
-
-        screen.blit(pygame.transform.scale(grafika_plansza_5x5, (800, 600)), (0, 0))
-
-        for figure in board.get_elements:
-            if figure[0] == 1:
-                screen.blit(pygame.transform.scale(circlesource, (80, 80)), figure[1])
-            if figure[0] == -1:
-                screen.blit(pygame.transform.scale(crosssource, (80, 80)), figure[1])
-
-        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
-        for event in pygame.event.get():
-            # interfacing with the board
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                try:
-                    pos = pygame.mouse.get_pos()
-                    if event.button == 1:
-                        board.add_figure(pos[0], pos[1])
-                except ValueError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-                except IndexError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-            # game exit
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                sys.exit()
-
-        pygame.display.update()
-        clock.tick(20)
-    pass
-
-
-#mian loop
+# mian loop
 def main_loop():
     game_intro()
     sys.exit()
