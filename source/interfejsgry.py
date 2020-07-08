@@ -4,10 +4,8 @@
 import pygame
 import os
 import sys
-from fgraph import ThreeBoard as Xthree
-from fgraph import FourBoard as Xfour
-from fgraph import FiveBoard as Xfive
-from play_4x4 import Game4x4 as x4check
+from source import fgraph, play_4x4
+
 
 pygame.init()
 pygame.font.init()
@@ -193,7 +191,7 @@ def game_menu_5x5():
 def plansza_3():
     game = True
 
-    board = Xthree()
+    board = fgraph.ThreeBoard()
 
     while game:
 
@@ -236,7 +234,7 @@ def plansza_3():
 def plansza_4():
     game = True
 
-    board = Xfour()
+    board = fgraph.FourBoard()
 
     while game:
 
@@ -269,13 +267,14 @@ def plansza_4():
                 sys.exit()
 
         # sprawdzanie wygranej
-        board_check = x4check(board.matrix)
-        if board_check.check() == 1:
-            # wygrywa kółko
-        elif board_check.check() == -1:
-            # wygrywa krzyżyk
+        board_check = play_4x4.Game4x4(board.matrix)
+        winner = board_check.check()
+        if winner == 1:
+            print()
+        elif winner == -1:
+            print()
         else:
-            # remis
+            print()
 
         pygame.display.update()
         clock.tick(20)
@@ -285,7 +284,7 @@ def plansza_4():
 def plansza_5():
     game = True
 
-    board = Xfive()
+    board = fgraph.FiveBoard()
 
     while game:
 
@@ -323,9 +322,6 @@ def plansza_5():
 
 
 #mian loop
-game_intro()
-game_menu_3x3()
-game_menu_4x4()
-game_menu_5x5()
-plansza_3()
-sys.exit()
+def main_loop():
+    game_intro()
+    sys.exit()
