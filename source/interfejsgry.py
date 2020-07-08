@@ -23,10 +23,15 @@ scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
 win = pygame.image.load(buttons.sciezka_do_img('back_tic_tac_toe.png'))
 
+
 # grafika planszy
-grafika_plansza_3x3 = pygame.image.load("./Plansze/Plansza_3x3_v1.png")
-grafika_plansza_4x4 = pygame.image.load("./Plansze/plansza_4x4.png")
-grafika_plansza_5x5 = pygame.image.load("./Plansze/plansza_5x5.PNG")
+def grafika_plansza(n: int):
+    if n == 3:
+        return pygame.image.load("./Plansze/Plansza_3x3_v1.png")
+    elif n == 4:
+        return pygame.image.load("./Plansze/plansza_4x4.png")
+    elif n == 5:
+        return pygame.image.load("./Plansze/plansza_5x5.PNG")
 
 # grafika figur
 crosssource = pygame.image.load("Plansze/x_3x3.png")
@@ -91,7 +96,7 @@ def plansza(n: int = None, m: int = None):
 
     while game:
 
-        screen.blit(pygame.transform.scale(grafika_plansza_3x3, (800, 600)), (0, 0))
+        screen.blit(pygame.transform.scale(grafika_plansza(n), (800, 600)), (0, 0))
 
         for figure in board.get_elements:
             if figure[0] == 1:
@@ -103,21 +108,31 @@ def plansza(n: int = None, m: int = None):
         for event in pygame.event.get():
             # interfacing with the board
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # try:
-                pos = pygame.mouse.get_pos()
-                if event.button == 1:
-                    board.add_figure(pos[0], pos[1])
-                # except ValueError as error:
-                # print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                # continue
-                # except IndexError as error:
-                # print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                # continue
+                try:
+                    pos = pygame.mouse.get_pos()
+                    if event.button == 1:
+                        board.add_figure(pos[0], pos[1])
+                except ValueError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+                except IndexError as error:
+                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
+                    continue
+
             # game exit
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
+
+            # game end check
+            winner = play_4x4.Game4x4(board=board.matrix).check()
+            if winner == 1:
+                print("wygrały kółka")
+            elif winner == -1:
+                print("wygrały krzyżyki")
+            elif winner == 0:
+                print("remis")
 
         pygame.display.update()
         clock.tick(100)
