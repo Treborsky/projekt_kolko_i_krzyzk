@@ -7,6 +7,7 @@ import sys
 from fgraph import ThreeBoard as Xthree
 from fgraph import FourBoard as Xfour
 from fgraph import FiveBoard as Xfive
+from play_4x4 import Game4x4 as x4check
 
 pygame.init()
 pygame.font.init()
@@ -224,6 +225,9 @@ def plansza_3():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
 
+        #sprawdzanie wygranej
+
+
         pygame.display.update()
         clock.tick(100)
     pass
@@ -263,6 +267,15 @@ def plansza_4():
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
+
+        # sprawdzanie wygranej
+        board_check = x4check(board.matrix)
+        if board_check.check() == 1:
+            # wygrywa kółko
+        elif board_check.check() == -1:
+            # wygrywa krzyżyk
+        else:
+            # remis
 
         pygame.display.update()
         clock.tick(20)
