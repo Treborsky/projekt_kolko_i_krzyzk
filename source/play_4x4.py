@@ -1,11 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-#boardx = [[0, 0, 0, 0],
-#          [0, 0, 0, 0],
-#          [0, 0, 0, 0],
-#          [0, 0, 0, 0]]
-
 
 class Game4x4(object):
 
@@ -136,7 +131,7 @@ class Game4x4(object):
             self.player_points = self.player_points + 1
             return -1   # wygrywa gracz ( I-tura: krzyzyk)
 
-        elif not (Game4x4.rows(self) or Game4x4.column(self) or Game4x4.slant(self) or Game4x4.square(self)):
+        elif ((Game4x4.rows(self) is False) or (Game4x4.column(self) is False) or (Game4x4.slant(self) is False) or (Game4x4.square(self) is False)):
             self.nr_of_turn = self.nr_of_turn + 1
             self.comp_points = self.comp_points + 1
             return 1    # wygrywa komp (I-tura: kolko)
