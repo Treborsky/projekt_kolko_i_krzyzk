@@ -19,30 +19,12 @@ class Move:
             return 'cross'
 
     def str(self):
-        return '(' + str(self.x) + ', ' + str(self.y) + ')' + ', ' + self.player
-
-
-class ListOfMoves:
-
-    def __init__(self):
-        self.moves: List[Move] = []
-
-    def add_a_move(self, move: Move) -> None:
-        self.moves += [move]
-
-    def get_last_move(self) -> Move:
-        return self.moves[-1]
-
-    def str_all_moves(self) -> str:
-        out_str = ''
-        for move in self.moves:
-            out_str += move.str()
-        return out_str
+        return '(' + str(self.x_pos) + ', ' + str(self.y_pos) + ')' + ', ' + self.player
 
 
 class GameMode:
 
-    def __init__(self, mode: bool):
+    def __init__(self, mode: int):
         self.mode: int = mode
 
     def str_game_mode(self):
@@ -59,10 +41,8 @@ class GameMode:
 class SingleGameScore:
     game_number: int = 1
 
-    def __init__(self, size: int = None, list_of_moves=None, winner: bool = None, gamemode: GameMode = None):
-        if list_of_moves is None:
-            list_of_moves = []
-        self.moves: ListOfMoves = list_of_moves
+    def __init__(self, size: int = None,  winner: bool = None, gamemode: GameMode = None):
+        self.moves: List[Move] = []
 
         if gamemode is not None:
             self.game_mode: str = gamemode.str_game_mode()
@@ -71,21 +51,27 @@ class SingleGameScore:
 
         if size is not None:
             self.board_size: str = str(size)
-        elif 0 >= size >= 4:
-            raise ValueError
-        else:
-            raise TypeError
 
         if winner is not None:
             self.winner: str = str(winner)
-        else:
-            raise TypeError
+
+    def add_a_move(self, move: Move) -> None:
+        self.moves += [move]
+
+    def get_last_move(self) -> Move:
+        return self.moves[-1]
+
+    def str_all_moves(self) -> str:
+        out_str = ''
+        for move in self.moves:
+            out_str += move.str()
+        return out_str
 
     def print_single_game(self):
         out_str = 'Gra nr: '
         out_str += self.game_mode
         out_str += self.board_size + 'x' + self.board_size
-        out_str += self.moves.str_all_moves()
+        out_str += self.str_all_moves()
         return out_str
         pass
 

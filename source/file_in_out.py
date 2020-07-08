@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import game_statistics as gs
+from source import game_statistics as gs
 
 
 class GameHistoryFile:
