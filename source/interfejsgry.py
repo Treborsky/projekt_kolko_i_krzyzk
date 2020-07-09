@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-import os
 import sys
-from source import fgraph, play_4x4, game_statistics, buttons
-from typing import Tuple
+from source import fgraph, buttons, game_end
+
 
 pygame.init()
 
@@ -16,6 +15,7 @@ def quit_program():
             sys.exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
+
 
 # okno gry
 scr_width = 800
@@ -32,6 +32,7 @@ def grafika_plansza(n: int):
         return pygame.image.load("./Plansze/plansza_4x4.png")
     elif n == 5:
         return pygame.image.load("./Plansze/plansza_5x5.PNG")
+
 
 # grafika figur
 crosssource = pygame.image.load("Plansze/x_3x3.png")
@@ -104,38 +105,31 @@ def plansza(n: int = None, m: int = None):
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
-        # event handling TODO: <- zamknąć cały ten blok w jakiejś funkcji / klasie-interfejsie
+        # event handling
         for event in pygame.event.get():
             # interfacing with the board
             if event.type == pygame.MOUSEBUTTONDOWN:
-                try:
-                    pos = pygame.mouse.get_pos()
-                    if event.button == 1:
-                        board.add_figure(pos[0], pos[1])
-                except ValueError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
-                except IndexError as error:
-                    print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    break
-
+                pos = pygame.mouse.get_pos()
+                if event.button == 1:
+                    board.add_figure(pos[0], pos[1])
+                    # game end check
+                    winner = game_end.ChekingBoard(board=board.matrix, size=n).check()
+                    if winner == 1:
+                        print("wygrały kółka")
+                        break
+                    elif winner == -1:
+                        print("wygrały krzyżyki")
+                        break
             # game exit
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
 
-            # game end check
-            winner = play_4x4.Game4x4(board=board.matrix).check()
-            if winner == 1:
-                print("wygrały kółka")
-                game_menu(n)
-            elif winner == -1:
-                print("wygrały krzyżyki")
-                game_menu(n)
-
         pygame.display.update()
         clock.tick(100)
+
+    game_menu(n)
     pass
 
 
