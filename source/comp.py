@@ -4,6 +4,7 @@
 from typing import Tuple
 import random
 
+
 def computer_move(board, mark_bool: bool)->Tuple[int,int]:
     # def start_game(n):
     #     A = ([[0] * (n)] * (n))
@@ -16,7 +17,7 @@ def computer_move(board, mark_bool: bool)->Tuple[int,int]:
 
     def ruch(poz_x, poz_y, mark, matrix):
         if matrix[poz_x % 3][poz_y % 3] == 0:
-            return((x%3,y%3))
+            return((poz_x%3, poz_y%3))
 
     def order(matrix):
         lst = []
@@ -50,19 +51,19 @@ def computer_move(board, mark_bool: bool)->Tuple[int,int]:
         if i >= 0 and i < 3:
             for j in range(3):
                 if B[i][j] == 0:
-                    ruch(j, i, mark, A)
+                    return ruch(j, i, mark, A)
         elif (i >= 3 and i < 6):
             for j in range(3):
                 if B[j][i % 3] == 0:
-                    ruch(j, i, mark, A)
+                    return ruch(j, i, mark, A)
         elif i == 6:
             for j in range(3):
                 if B[i][j] == 0:
-                    ruch(j, j, mark, A)
+                    return ruch(j, j, mark, A)
         elif i == 7:
             for j in range(3):
                 if B[i][j] == 0:
-                    ruch(j, 2 - j, mark, A)
+                    return ruch(j, 2 - j, mark, A)
 
     def rd():
         return random.choice([0, 1, 2])
@@ -71,16 +72,16 @@ def computer_move(board, mark_bool: bool)->Tuple[int,int]:
         Ord = order(A)
         for i in range(len(Ord)):
             if how_much(mark, Ord[i]) == 2:
-                fajen(i, A, mark)
-                return
+                return fajen(i, A, mark)
+
         for i in range(len(Ord)):
             if how_much(-mark, Ord[i]) == 2:
-                fajen(i, A, mark)
-                return
+                return fajen(i, A, mark)
+
         for i in Ord:
             if how_much(mark, Ord) == 1 and how_much(-mark, Ord) == 0:
-                fajen(i, A, mark)
-                return
+                return fajen(i, A, mark)
+
         L = 1
         while L != 0:
             x = rd()
@@ -88,6 +89,4 @@ def computer_move(board, mark_bool: bool)->Tuple[int,int]:
             L = A[x][y]
         ruch(x, y, mark, A)
         return
-    comp_moves(board,mark)
-
-
+    return comp_moves(board, mark)
