@@ -44,7 +44,8 @@ class Board:
             if self.y_dimensions__[i][0] < y_mouse_position < self.y_dimensions__[i][1]:
                 y = i
         if x == -1 or y == -1:
-            raise ValueError("nie zaznaczono pola")
+            print("nice man")
+            # raise ValueError("nie zaznaczono pola")
         else:
             return x, y
 
@@ -54,12 +55,12 @@ class Board:
 
     def add_figure(self, x_mouse_position, y_mouse_position) -> None:
         # updates the state of the matrix and switches form x's to o's and the other way round
-        try:
-            xs, ys = self.translate_pos(x_mouse_position, y_mouse_position)
-            self.update_elements(xs, ys)
-            self.state = not self.state
-        except ValueError as error:
-            raise ValueError(error)
+        #try:
+        xs, ys = self.translate_pos(x_mouse_position, y_mouse_position)
+        self.update_elements(xs, ys)
+        self.state = not self.state
+        #except ValueError as error:
+         #   raise ValueError(error)
         pass
 
     def update_elements(self, i, j) -> None:
@@ -69,13 +70,13 @@ class Board:
                 self.matrix[i][j] = 1
             elif self.state is False:
                 self.matrix[i][j] = -1
-        else:
-            raise ValueError("already filled")
+        #else:
+            #raise ValueError("already filled")
 
         if len(self.figure_list) <= self.size*self.size:
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
-        else:
-            raise IndexError("plansza pelna")
+        #else:
+            #raise IndexError("plansza pelna")
         pass
 
     @property
