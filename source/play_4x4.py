@@ -136,6 +136,6 @@ class Game4x4(object):
             self.comp_points = self.comp_points + 1
             return 1    # wygrywa komp (I-tura: kolko)
 
-        else:
-            self.nr_of_turn = self.nr_of_turn + 1
-            return 0    # remis
+        #else:
+          #  self.nr_of_turn = self.nr_of_turn + 1
+           # return 0    # remis

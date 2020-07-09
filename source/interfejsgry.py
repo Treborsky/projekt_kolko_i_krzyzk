@@ -117,7 +117,7 @@ def plansza(n: int = None, m: int = None):
                     continue
                 except IndexError as error:
                     print(error)  # TODO: <- tutaj należy obsłużyć dany wyjątek
-                    continue
+                    break
 
             # game exit
             if event.type == pygame.QUIT:
@@ -129,10 +129,10 @@ def plansza(n: int = None, m: int = None):
             winner = play_4x4.Game4x4(board=board.matrix).check()
             if winner == 1:
                 print("wygrały kółka")
+                game_menu(n)
             elif winner == -1:
                 print("wygrały krzyżyki")
-            elif winner == 0:
-                print("remis")
+                game_menu(n)
 
         pygame.display.update()
         clock.tick(100)
