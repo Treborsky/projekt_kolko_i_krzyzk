@@ -114,8 +114,13 @@ def plansza(n: int = None, m: int = None):
 
                 if event.button == 1:
 
-                    board.add_figure(pos[0], pos[1])                                    # here adding a new cross/circle
+                    board.add_figure(pos[0], pos[1])
+                    #
+
+                    # here adding a new cross/circle
                     winner = game_end.ChekingBoard(board=board.matrix, size=n).check()  # here checking for a win
+
+
 
                     if winner == 1:                                                     # TODO: rewrite it's ugly
                         print("wygrały kółka")
