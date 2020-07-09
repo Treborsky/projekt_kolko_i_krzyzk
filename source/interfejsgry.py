@@ -109,19 +109,22 @@ def plansza(n: int = None, m: int = None):
         for event in pygame.event.get():
             # interfacing with the board
             if event.type == pygame.MOUSEBUTTONDOWN:
+
                 pos = pygame.mouse.get_pos()
+
                 if event.button == 1:
-                    board.add_figure(pos[0], pos[1])
-                    # game end check
-                    winner = game_end.ChekingBoard(board=board.matrix, size=n).check()
-                    if winner == 1:
+
+                    board.add_figure(pos[0], pos[1])                                    # here adding a new cross/circle
+                    winner = game_end.ChekingBoard(board=board.matrix, size=n).check()  # here checking for a win
+
+                    if winner == 1:                                                     # TODO: rewrite it's ugly
                         print("wygrały kółka")
                         break
                     elif winner == -1:
                         print("wygrały krzyżyki")
                         break
-            # game exit
-            if event.type == pygame.QUIT:
+
+            if event.type == pygame.QUIT:                                               # here checking for a quit event
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
