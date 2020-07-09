@@ -57,7 +57,21 @@ class ChekingBoard:
 
     def square(self) -> int:
         if self.n > 3:
-            return 0  # TODO: wpisać logikę kwadratów 2x2 dla plansz NxN
+            a = 0
+            b = 0
+            c = 1
+            d = 1
+            winner = 0
+            for i in range(0, self.n - 1):
+                for j in range(0, self.n - 1):
+                    winner = self.board_[a][b] + self.board_[a][d] + self.board_[c][b] + self.board_[c][d]
+                    if winner == 4:
+                        return 1
+                    elif winner == -4:
+                        return -1
+                    else:
+                        continue
+            return 0
         else:
             return 0
 
