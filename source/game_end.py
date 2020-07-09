@@ -55,15 +55,24 @@ class ChekingBoard:
             return -1
         return 0
 
+    def square(self) -> int:
+        if self.n > 3:
+            return 0  # TODO: wpisać logikę kwadratów 2x2 dla plansz NxN
+        else:
+            return 0
+
     def check(self) -> int:
         cols = self.cols()
         rows = self.rows()
         slants = self.slant()
+        squares = self.square()
         if cols != 0:
             return cols
         elif rows != 0:
             return rows
         elif slants != 0:
             return slants
+        elif squares != 0:
+            return squares
         else:
             return 0
