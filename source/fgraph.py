@@ -14,7 +14,7 @@ x5_dimensions__: List[Tuple[int, int]] = [(124, 225), (236, 331), (342, 438), (4
 y5_dimensions__: List[Tuple[int, int]] = [(17, 118), (129, 227), (239, 338), (349, 447), (459, 561)]
 
 
-class Board:
+class Board:    # TODO: exception handling ground-up
 
     figure_list: List = []
 
@@ -45,6 +45,7 @@ class Board:
                 y = i
         if x == -1 or y == -1:
             print("nice man")
+            return 0, 0
             # raise ValueError("nie zaznaczono pola")
         else:
             return x, y
@@ -72,7 +73,8 @@ class Board:
                 self.matrix[i][j] = -1
         #else:
             #raise ValueError("already filled")
-
+        else:
+            return
         if len(self.figure_list) <= self.size*self.size:
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
         #else:

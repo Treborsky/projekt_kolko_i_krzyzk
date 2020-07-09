@@ -118,7 +118,7 @@ def plansza(n: int = None, m: int = None):
                     winner = game_end.ChekingBoard(board=board.matrix, size=n).check()  # here checking for a win
 
                     if winner == 1:                                                     # TODO: rewrite it's ugly
-                        print("wygrały kółka")
+                        print("wygrały kółka")                                          # TODO: exception handling mordo
                         break
                     elif winner == -1:
                         print("wygrały krzyżyki")

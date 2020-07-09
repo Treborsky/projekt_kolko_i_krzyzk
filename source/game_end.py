@@ -4,7 +4,7 @@ from typing import List
 
 
 # konwencja taka, jak wszędzie indziej -1 to krzyżyk 1 to kółko
-class ChekingBoard:
+class ChekingBoard:  # TODO: exception handling
 
     def __init__(self, board: List[List[int]] = None, size: int = None):
         self.board_ = board
@@ -16,7 +16,6 @@ class ChekingBoard:
             winner = 0
             for y in range(0, self.n):
                 winner += self.board_[x][y]
-
             if winner == self.n:
                 return 1
             elif winner == -self.n:
@@ -39,7 +38,6 @@ class ChekingBoard:
         winner = 0
         for x in range(0, self.n):
             winner += self.board_[x][x]
-
         if winner == self.n:
             return 1
         elif winner == -self.n:
@@ -48,7 +46,6 @@ class ChekingBoard:
         winner = 0
         for x in range(0, self.n):
             winner += self.board_[x][-x-1]
-            print(winner)
         if winner == self.n:
             return 1
         elif winner == -self.n:
@@ -64,7 +61,7 @@ class ChekingBoard:
             winner = 0
             for i in range(0, self.n - 1):
                 for j in range(0, self.n - 1):
-                    winner = self.board_[a][b] + self.board_[a][d] + self.board_[c][b] + self.board_[c][d]
+                    winner = self.board_[a+j][b+i] + self.board_[a+j][d+i] + self.board_[c+j][b+i] + self.board_[c+j][d+i]
                     if winner == 4:
                         return 1
                     elif winner == -4:
