@@ -85,21 +85,28 @@ class GameCheck(object):
 
     # sprawdzanie skosow
     def slant(self):
+        size = self.size
+
+        if self.size == 5:
+            size = self.size - 1
+
         if self.size > 2:
             total_1 = 0
             total_2 = 0
 
             # sumowanie skosu od lewego gornego rogu do prawego dolnego
-            for nr_slant in range(self.size):
+            for nr_slant in range(size):
                 total_1 = total_1 + self.board[nr_slant][nr_slant]
 
             # sumowanie skosu od lewego dolnego rogu do prawego gornego
-            for nr_row, nr_col in zip(range(self.size), range(self.size - 1, -1, -1)):
+            for nr_row, nr_col in zip(range(size), range(size - 1, -1, -1)):
                 total_2 = total_2 + self.board[nr_row][nr_col]
 
-            # sprawdzanie numeru tury
-            if self.size == 4:
+            if self.size == 4 or self.size == 5:
+
+                # sprawdzanie numeru tury
                 if self.nr_of_turn % 2 == 1:
+
                     if total_1 == -4 or total_2 == -4:
                         return True
 
@@ -112,7 +119,10 @@ class GameCheck(object):
 
                     if total_1 == -4 or total_2 == -4:
                         return False
-            elif self.size == 3:
+
+            if self.size == 3:
+
+                # sprawdzanie numeru tury
                 if self.nr_of_turn % 2 == 1:
                     if total_1 == -3 or total_2 == -3:
                         return True
@@ -126,10 +136,8 @@ class GameCheck(object):
 
                     if total_1 == -3 or total_2 == -3:
                         return False
-            else:
-                return None
 
-        elif self.size == 5:
+        if self.size == 5:
             total_1 = 0
             total_2 = 0
             total_3 = 0
@@ -137,11 +145,9 @@ class GameCheck(object):
             total_5 = 0
             total_6 = 0
 
-            # sumowanie skosu od lewego gornego rogu do prawego dolnego
             for nr_slant in range(1, 5):
                 total_1 = total_1 + self.board[nr_slant][nr_slant]
 
-            # sumowanie skosu od lewego dolnego rogu do prawego gornego
             for nr_row, nr_col in zip(range(1, 5), range(4, 0, -1)):
                 total_2 = total_2 + self.board[nr_row][nr_col]
 
@@ -171,8 +177,6 @@ class GameCheck(object):
 
                 if total_1 == -4 or total_2 == -4 or total_3 == -4 or total_4 == -4 or total_5 == -4 or total_6 == -4:
                     return False
-        else:
-            return None
 
     # sprawdzanie kwadratow
     def square(self):
