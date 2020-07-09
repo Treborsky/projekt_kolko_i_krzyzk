@@ -58,10 +58,10 @@ class ChekingBoard:  # TODO: exception handling
             b = 0
             c = 1
             d = 1
-            winner = 0
             for i in range(0, self.n - 1):
                 for j in range(0, self.n - 1):
-                    winner = self.board_[a+j][b+i] + self.board_[a+j][d+i] + self.board_[c+j][b+i] + self.board_[c+j][d+i]
+                    winner = self.board_[a+j][b+i] + self.board_[a+j][d+i] + \
+                             self.board_[c+j][b+i] + self.board_[c+j][d+i]
                     if winner == 4:
                         return 1
                     elif winner == -4:
