@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 from typing import List, Tuple
-
+from source import comp
 
 x3_dimensions__: List[Tuple[int, int]] = [(146, 314), (326, 473), (487, 651)]
 y3_dimensions__: List[Tuple[int, int]] = [(107, 234), (245, 354), (365, 493)]
@@ -14,7 +14,7 @@ x5_dimensions__: List[Tuple[int, int]] = [(124, 225), (236, 331), (342, 438), (4
 y5_dimensions__: List[Tuple[int, int]] = [(17, 118), (129, 227), (239, 338), (349, 447), (459, 561)]
 
 
-class Board:
+class Board:    # TODO: exception handling ground-up
 
     figure_list: List = []
 
@@ -45,6 +45,7 @@ class Board:
                 y = i
         if x == -1 or y == -1:
             print("nice man")
+            return 0, 0
             # raise ValueError("nie zaznaczono pola")
         else:
             return x, y
@@ -52,6 +53,23 @@ class Board:
     def re_translate_pos(self, x, y) -> Tuple[int, int]:
         # returns the top left corner of the proper rectangle to put a figure in
         return self.x_dimensions__[x][0], self.y_dimensions__[y][0]
+
+    def update_elements(self, i, j) -> None:
+        # updates the matrix and adds the new figure to the list of figures for display
+        if self.matrix[i][j] == 0:
+            if self.state is True:
+                self.matrix[i][j] = 1
+            elif self.state is False:
+                self.matrix[i][j] = -1
+        #else:
+            #raise ValueError("already filled")
+        else:
+            return
+        if len(self.figure_list) <= self.size*self.size:
+            self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
+        #else:
+            #raise IndexError("plansza pelna")
+        pass
 
     def add_figure(self, x_mouse_position, y_mouse_position) -> None:
         # updates the state of the matrix and switches form x's to o's and the other way round
@@ -63,21 +81,10 @@ class Board:
          #   raise ValueError(error)
         pass
 
-    def update_elements(self, i, j) -> None:
-        # updates the matrix and adds the new figure to the list of figures for display
-        if self.matrix[i][j] == 0:
-            if self.state is True:
-                self.matrix[i][j] = 1
-            elif self.state is False:
-                self.matrix[i][j] = -1
-        #else:
-            #raise ValueError("already filled")
-
-        if len(self.figure_list) <= self.size*self.size:
-            self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
-        #else:
-            #raise IndexError("plansza pelna")
-        pass
+    def computers_move(self) -> None:
+        raw_move = comp.computer_move(self.matrix, self.state)
+        comp_move = self.re_translate_pos(raw_move[0], raw_move[1])
+        self.add_figure(comp_move[0], comp_move[1])
 
     @property
     def get_elements(self) -> List:
