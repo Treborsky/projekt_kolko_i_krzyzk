@@ -5,7 +5,7 @@ from typing import Tuple
 import random
 
 
-def computer_move_3x3(board, mark_bool: bool) -> Tuple[int, int]:
+def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
     # def start_game(n):
     #     A = ([[0] * (n)] * (n))
     #     return A
