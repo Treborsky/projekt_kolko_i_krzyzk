@@ -4,39 +4,43 @@
 from typing import Tuple
 import random
 
-def computer_move(board, mark_bool: bool)->Tuple[int,int]:
+
+def computer_move_3x3(board, mark_bool: bool) -> Tuple[int, int]:
     # def start_game(n):
     #     A = ([[0] * (n)] * (n))
     #     return A
 
     if mark_bool:
-        mark=1
+        mark_int = 1
     else:
-        mark=-1
+        mark_int = -1
 
-    def ruch(poz_x, poz_y, mark, matrix):
+    def move_mark(poz_x, poz_y, mark, matrix):
         if matrix[poz_x % 3][poz_y % 3] == 0:
-            return((x%3,y%3))
+            return poz_x, poz_y
 
     def order(matrix):
-        lst = []
+        result_list = []
         for i in range(3):
-            lstt = []
+            support_list = []
             for j in range(3):
-                lstt.append(matrix[i][j])
-            lst.append(lstt)
+                support_list.append(matrix[i][j])
+            result_list.append(support_list)
         for j in range(3):
-            lstt = []
+            support_list = []
             for i in range(3):
-                lstt.append(matrix[i][j])
-            lst.append(lstt)
-        lsttt = []
+                support_list.append(matrix[i][j])
+            result_list.append(support_list)
+        support_list = []
         for i in range(3):
-            lsttt.append(matrix[i][i])
-        lst.append(lsttt)
-        q = [matrix[0][2], matrix[1][1], matrix[2][0]]
-        lst.append(q)
-        return lst
+            support_list.append(matrix[i][i])
+        result_list.append(support_list)
+        support_list = []
+        for i in range(3):
+            support_list.append(matrix[i][2 - i])
+        # q = [matrix[0][2], matrix[1][1], matrix[2][0]]
+        result_list.append(support_list)
+        return result_list
 
     def how_much(x, lst):
         s = 0
@@ -45,49 +49,44 @@ def computer_move(board, mark_bool: bool)->Tuple[int,int]:
                 s += 1
         return s
 
-    def fajen(i, A, mark):
-        B = order(A)
-        if i >= 0 and i < 3:
+    def heart(i, matrix, mark):
+        ordered_list = order(matrix)
+        if 0 <= i < 3:
             for j in range(3):
-                if B[i][j] == 0:
-                    ruch(j, i, mark, A)
-        elif (i >= 3 and i < 6):
+                if ordered_list[i][j] == 0:
+                    return move_mark(j, i, mark, matrix)
+        elif 3 <= i < 6:
             for j in range(3):
-                if B[j][i % 3] == 0:
-                    ruch(j, i, mark, A)
+                if ordered_list[j][i % 3] == 0:
+                    return move_mark(j, i, mark, matrix)
         elif i == 6:
             for j in range(3):
-                if B[i][j] == 0:
-                    ruch(j, j, mark, A)
+                if ordered_list[i][j] == 0:
+                    return move_mark(j, j, mark, matrix)
         elif i == 7:
             for j in range(3):
-                if B[i][j] == 0:
-                    ruch(j, 2 - j, mark, A)
+                if ordered_list[i][j] == 0:
+                    return move_mark(j, 2 - j, mark, matrix)
 
     def rd():
         return random.choice([0, 1, 2])
 
-    def comp_moves(A, mark):
-        Ord = order(A)
-        for i in range(len(Ord)):
-            if how_much(mark, Ord[i]) == 2:
-                fajen(i, A, mark)
-                return
-        for i in range(len(Ord)):
-            if how_much(-mark, Ord[i]) == 2:
-                fajen(i, A, mark)
-                return
-        for i in Ord:
-            if how_much(mark, Ord) == 1 and how_much(-mark, Ord) == 0:
-                fajen(i, A, mark)
-                return
-        L = 1
-        while L != 0:
+    def comp_moves(matrix, mark):
+        ordered = order(matrix)
+        for i in range(len(ordered)):
+            if how_much(mark, ordered[i]) == 2:
+                return heart(i, matrix, mark)
+        for i in range(len(ordered)):
+            if how_much(-mark, ordered[i]) == 2:
+                return heart(i, matrix, mark)
+        for i in ordered:
+            if how_much(mark, ordered) == 1 and how_much(-mark, ordered) == 0:
+                return heart(i, matrix, mark)
+        v = 1
+        while v != 0:
             x = rd()
             y = rd()
-            L = A[x][y]
-        ruch(x, y, mark, A)
-        return
-    comp_moves(board,mark)
+            v = matrix[x][y]
+        return move_mark(x, y, mark, matrix)
 
-
+    return comp_moves(board, mark_int)
