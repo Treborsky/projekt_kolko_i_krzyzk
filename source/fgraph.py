@@ -83,8 +83,8 @@ class Board:    # TODO: exception handling ground-up
 
     def computers_move(self) -> None:
         raw_move = comp.computer_move(self.matrix, self.state)
-        comp_move = self.re_translate_pos(raw_move[0], raw_move[1])
-        self.add_figure(comp_move[0], comp_move[1])
+        self.update_elements(raw_move[0], raw_move[1])
+        self.state = not self.state
 
     @property
     def get_elements(self) -> List:
