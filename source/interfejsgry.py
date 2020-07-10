@@ -113,14 +113,12 @@ def plansza(n: int = None, m: int = None):
                 pos = pygame.mouse.get_pos()
 
                 if event.button == 1:
+                    board.add_figure(pos[0], pos[1])                                    # here adding a new cross/circle
 
-                    board.add_figure(pos[0], pos[1])
-                    #
+                    if m == 2:                                                          # here optional computer move mordo
+                        board.computers_move()
 
-                    # here adding a new cross/circle
                     winner = game_end.ChekingBoard(board=board.matrix, size=n).check()  # here checking for a win
-
-
 
                     if winner == 1:                                                     # TODO: rewrite it's ugly
                         print("wygrały kółka")                                          # TODO: exception handling mordo
