@@ -17,7 +17,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
 
     def move_mark(poz_x, poz_y, mark, matrix):
         if matrix[poz_x % 3][poz_y % 3] == 0:
-            return poz_x, poz_y
+            return poz_x % 3, poz_y % 3
 
     def order(matrix):
         result_list = []
