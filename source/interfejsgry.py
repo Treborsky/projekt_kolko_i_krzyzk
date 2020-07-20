@@ -45,7 +45,7 @@ clock = pygame.time.Clock()
 
 
 # ekran główny
-def game_intro():
+def game_intro(void = None):
     intro = True
 
     while intro:
