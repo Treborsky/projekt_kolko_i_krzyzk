@@ -3,6 +3,7 @@
 
 import pygame
 import sys
+import time
 from source import fgraph, buttons, game_end, CheckMate
 
 
@@ -42,7 +43,8 @@ circlesource = pygame.image.load("Plansze/o_3x3.png")
 pygame.display.set_caption("Tic Tac Toe")
 
 clock = pygame.time.Clock()
-
+white = (255, 255, 255)
+font = pygame.font.Font(None, 30)
 
 # ekran główny
 def game_intro(void = None):
@@ -95,6 +97,7 @@ def plansza(size: int = None, g_type: int = None):
     game = True
 
     board = fgraph.Board(size)
+    start_time = time.time()
 
     while game:
 
@@ -133,6 +136,18 @@ def plansza(size: int = None, g_type: int = None):
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
+        if g_type == 3:
+            time_limit = 5
+
+            elapsed_time = time.time() - start_time
+            timer = time_limit - int(elapsed_time)
+            output_string = "Time left: 0:{0:02}".format(timer)
+            text = font.render(output_string, True, white)
+
+            screen.blit(text, [30, 50])
+            if elapsed_time > time_limit:
+                print("Game over")
+                game_menu()
 
         pygame.display.update()
         clock.tick(100)
