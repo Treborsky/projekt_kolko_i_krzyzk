@@ -112,7 +112,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
         if 0 <= i < 3:
             for j in range(3):
                 if ordered_list[i][j] == 0:
-                    return move_marking(j, i, mark, matrix, 3)
+                    return move_marking(i, j, mark, matrix, 3)
         elif 3 <= i < 6:
             for j in range(3):
                 if ordered_list[j][i % 3] == 0:
@@ -131,11 +131,11 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
         if 0 <= i < 4:
             for j in range(4):
                 if ordered_list[i][j] == 0:
-                    return move_marking(j, i, mark, matrix, 4)
+                    return move_marking(i, j, mark, matrix, 4)
         elif 4 <= i < 8:
             for j in range(4):
-                if ordered_list[j][i % 3] == 0:
-                    return move_marking(j, i % 3, mark, matrix, 4)
+                if ordered_list[j][i % 4] == 0:
+                    return move_marking(j, i, mark, matrix, 4)
         elif i == 8:
             for j in range(4):
                 if ordered_list[i][j] == 0:
@@ -144,6 +144,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             for j in range(4):
                 if ordered_list[i][j] == 0:
                     return move_marking(j, 2 - j, mark, matrix, 4)
+
     # def heart_new(i, matrix, mark):
     #     ordered_list = order(matrix)
     #     if 1 <= i < 3:
@@ -182,33 +183,21 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
 
     def comp_move_3x3(matrix, mark):
         ordered_list = order(matrix)
-        check_acc = 0
+        print(ordered_list)
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 1:
-                check_acc = 1
                 return heart_3x3(i, matrix, mark)
         for i in range(len(ordered_list)):
             if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 1:
-                check_acc = 1
                 return heart_3x3(i, matrix, mark)
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) == 2:
-                check_acc = 1
                 return heart_3x3(i, matrix, mark)
-        if check_acc == 0:
-            # v = 1
-            # x = 0
-            # y = 0
-            # while v != 0:
-            #     x = rd()
-            #     y = rd()
-            #     v = matrix[x][y]
-            # return move_marking(x, y, mark, matrix)
-            return random_move(matrix, mark, 3)
+        return random_move(matrix, mark, 3)
 
     def comp_move_4x4(matrix, mark):
         ordered_list = order(matrix)
-
+        print(ordered_list)
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) == 1:
                 return heart_4x4(i, matrix, mark)
@@ -216,13 +205,16 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             if how_much(-mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) == 1:
                 return heart_4x4(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
-                return heart_4x4(i, matrix, mark)
-        for i in range(len(ordered_list)):
             if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
                 return heart_4x4(i, matrix, mark)
         for i in range(len(ordered_list)):
+            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
+                return heart_4x4(i, matrix, mark)
+        for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) == 3:
+                return heart_4x4(i, matrix, mark)
+        for i in range(len(ordered_list)):
+            if how_much(-mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) == 3:
                 return heart_4x4(i, matrix, mark)
         return random_move(matrix, mark, 4)
 
