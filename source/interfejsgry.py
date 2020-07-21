@@ -3,7 +3,7 @@
 
 import pygame
 import sys
-from source import fgraph, buttons, game_end
+from source import fgraph, buttons, game_end, CheckMate
 
 
 pygame.init()
@@ -119,7 +119,8 @@ def plansza(size: int = None, g_type: int = None):
                     if g_type == 2:                                                 # here optional computer move mordo
                         board.computers_move()
 
-                    winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
+                    #winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
+                    winner = CheckMate.GameCheck(board=board.matrix, size=size).check()
 
                     if winner == 1:                                                 # TODO: rewrite it's ugly
                         print("wygrały kółka")                                      # TODO: exception handling mordo
