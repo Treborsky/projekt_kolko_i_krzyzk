@@ -39,13 +39,13 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
     #     return result_list
 
     def move_marking(poz_x, poz_y, mark, matrix, n):
-         #matrix = inverse_entrance_transformation(matrix)
+         # matrix = inverse_entrance_transformation(matrix)
         if matrix[poz_x % n][poz_y % n] == 0:
             print(poz_x, poz_y)
             # print(matrix)
             return poz_x % n, poz_y % n
         else:
-            #return random_move(inverse_entrance_transformation(matrix), mark)
+            # return random_move(inverse_entrance_transformation(matrix), mark)
             return random_move(matrix, mark, n)
 
     def order(matrix):
@@ -173,13 +173,13 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             for j in range(n):
                 if matrix[i][j] == 0:
                     result_list.append((i, j))
-        move_tuple = random.choice(result_list)
-        if result_list is not None:
+        if result_list is None:
+            return
+        else:
+            move_tuple = random.choice(result_list)
             x = move_tuple[0]
             y = move_tuple[1]
             return move_marking(x, y, mark, matrix, n)
-        else:
-            return
 
     def comp_move_3x3(matrix, mark):
         ordered_list = order(matrix)
