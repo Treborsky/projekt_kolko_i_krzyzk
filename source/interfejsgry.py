@@ -46,8 +46,9 @@ clock = pygame.time.Clock()
 white = (255, 255, 255)
 font = pygame.font.Font(None, 30)
 
+
 # ekran główny
-def game_intro(void = None):
+def game_intro(void=None):
     intro = True
 
     while intro:
@@ -64,6 +65,8 @@ def game_intro(void = None):
 
         pygame.display.update()
         clock.tick(100)
+
+    sys.exit()
     pass
 
 
@@ -90,6 +93,7 @@ def game_menu(size: int = None):
 
         pygame.display.update()
         clock.tick(100)
+    game_intro()
     pass
 
 
@@ -119,18 +123,19 @@ def plansza(size: int = None, g_type: int = None):
                 if event.button == 1:
                     board.add_figure(pos[0], pos[1])                                # here adding a new cross/circle
 
-                    if g_type == 2:                                                 # here optional computer move mordo
-                        board.computers_move()
-
-                    #winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
                     winner = CheckMate.GameCheck(board=board.matrix, size=size).check()
 
-                    if winner == 1:                                                 # TODO: rewrite it's ugly
+                    if g_type == 2 and winner != 1 and winner != -1:# here optional computer move mordo
+                        board.computers_move()
+                    # winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
+                    elif winner == 1:                                                 # TODO: rewrite it's ugly
                         print("wygrały kółka")                                      # TODO: exception handling mordo
                         break
                     elif winner == -1:
                         print("wygrały krzyżyki")
                         break
+                    elif winner == 0 and len(board.figure_list) == size*size:
+                        print("remis")
 
             if event.type == pygame.QUIT:                                           # here checking for a quit event
                 sys.exit()
