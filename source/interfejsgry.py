@@ -47,33 +47,38 @@ white = (255, 255, 255)
 font = pygame.font.Font(None, 30)
 
 
-# ekran główny
 def game_intro(void=None):
     intro = True
+
+    def void_action(empty=None):
+        pass
 
     while intro:
         quit_program()
 
         screen.blit(win, (0, 0))
 
-        button1 = buttons.Button(290, 220, 210, 60, '3x3', game_menu, 3)
-        button2 = buttons.Button(290, 300, 210, 60, '4x4', game_menu, 4)
-        button3 = buttons.Button(290, 380, 210, 60, '5x5', game_menu, 5)
-        button4 = buttons.Button(290, 460, 210, 60, 'Exit', sys.exit)
+        button1 = buttons.Button(290, 220, 210, 60, 'Normal', game_menu, 1)
+        button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', game_menu, 2)
+        button3 = buttons.Button(290, 380, 210, 60, 'Game time', game_menu, 3)
+        button4 = buttons.Button(290, 460, 210, 60, 'Exit', void_action)
 
         intro = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
 
         pygame.display.update()
-        clock.tick(100)
+        clock.tick(20)
 
-    sys.exit()
+    return intro
     pass
 
 
-def game_menu(size: int = None):
+def game_menu(g_type: int = None):
 
-    def start(g_type: int = None):
-        plansza(size, g_type)
+    def start(size: int = None):
+        return plansza(size, g_type)
+
+    def to_intro(empty=None):
+        pass
 
     run = True
 
@@ -84,16 +89,17 @@ def game_menu(size: int = None):
 
         screen.blit(win, (0, 0))
 
-        button1 = buttons.Button(290, 220, 210, 60, 'Normal', start, 1)
-        button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', start, 2)
-        button3 = buttons.Button(290, 380, 210, 60, 'Game time', start, 3)
-        button4 = buttons.Button(290, 460, 210, 60, 'Return', game_intro)
+        button1 = buttons.Button(290, 220, 210, 60, '3x3', start, 3)
+        button2 = buttons.Button(290, 300, 210, 60, '4x4', start, 4)
+        button3 = buttons.Button(290, 380, 210, 60, '5x5', start, 5)
+        button4 = buttons.Button(290, 460, 210, 60, 'Return', to_intro)
 
         run = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
 
         pygame.display.update()
-        clock.tick(100)
-    game_intro()
+        clock.tick(20)
+
+    return game_intro()
     pass
 
 
@@ -113,23 +119,22 @@ def plansza(size: int = None, g_type: int = None):
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
-        # event handling
         for event in pygame.event.get():
-            # interfacing with the board
+
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 pos = pygame.mouse.get_pos()
 
                 if event.button == 1:
-                    board.add_figure(pos[0], pos[1])                                # here adding a new cross/circle
+                    board.add_figure(pos[0], pos[1])
 
                     winner = CheckMate.GameCheck(board=board.matrix, size=size).check()
 
-                    if g_type == 2 and winner != 1 and winner != -1:# here optional computer move mordo
+                    if g_type == 2 and winner != 1 and winner != -1:
                         board.computers_move()
-                    # winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
-                    elif winner == 1:                                                 # TODO: rewrite it's ugly
-                        print("wygrały kółka")                                      # TODO: exception handling mordo
+
+                    elif winner == 1:
+                        print("wygrały kółka")
                         break
                     elif winner == -1:
                         print("wygrały krzyżyki")
@@ -137,10 +142,11 @@ def plansza(size: int = None, g_type: int = None):
                     elif winner == 0 and len(board.figure_list) == size*size:
                         print("remis")
 
-            if event.type == pygame.QUIT:                                           # here checking for a quit event
+            if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
+
         if g_type == 3:
             time_limit = 5
 
@@ -152,16 +158,18 @@ def plansza(size: int = None, g_type: int = None):
             screen.blit(text, [30, 50])
             if elapsed_time > time_limit:
                 print("Game over")
-                game_menu()
+                game_intro()
 
         pygame.display.update()
         clock.tick(100)
 
-    game_menu(size)
+    game_intro()
     pass
 
 
 # mian loop
 def main_loop():
-    game_intro()
+    play = True
+    while play:
+        play = game_intro()
     sys.exit()
