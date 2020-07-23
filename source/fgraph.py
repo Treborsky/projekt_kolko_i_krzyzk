@@ -3,6 +3,7 @@
 
 from typing import List, Tuple
 from source import comp
+from source import ghistory as gh
 
 x3_dimensions__: List[Tuple[int, int]] = [(146, 314), (326, 473), (487, 651)]
 y3_dimensions__: List[Tuple[int, int]] = [(107, 234), (245, 354), (365, 493)]
@@ -33,6 +34,22 @@ class Board:    # TODO: exception handling ground-up
         elif n == 5:
             self.x_dimensions__: List[Tuple[int, int]] = x5_dimensions__
             self.y_dimensions__: List[Tuple[int, int]] = y5_dimensions__
+
+    @staticmethod
+    def game_type_str(s: int) -> str:
+        if s == 1:
+            return 'norm'
+        elif s == 2:
+            return 'comp'
+        elif s == 3:
+            return 'time'
+
+    @staticmethod
+    def figure_str(f: int) -> str:
+        if f == 1:
+            return 'o'
+        elif f == -1:
+            return 'x'
 
     def translate_pos(self, x_mouse_position, y_mouse_position) -> Tuple[int, int]:
         # translates the x-y position of the mouse into x,y coordinates on the backend 3x3 matrix
@@ -86,7 +103,20 @@ class Board:    # TODO: exception handling ground-up
         if raw_move is not None:
             self.update_elements(i=raw_move[0], j=raw_move[1])
             self.state = not self.state
-            
+
+    def save_game(self, gtype: int = 1):
+        board_size = self.size
+        game_type = self.game_type_str(gtype)
+
+        last_position = self.get_last_coordinates
+        winning_int = self.matrix[last_position[0]][last_position[1]]
+        winning_figure: str = self.figure_str(winning_int)
+
+        first_move = self.figure_list[0][1]
+        starting_int = self.matrix[first_move[0]][first_move[1]]
+        starting_figure: str = self.figure_str(starting_int)
+
+        return gh.Record(board_size, game_type, starting_figure, winning_figure).make_df()
 
     @property
     def get_elements(self) -> List:
