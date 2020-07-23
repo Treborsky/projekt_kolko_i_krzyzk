@@ -14,28 +14,43 @@ class Record:
         self.win_fig = winning_figure
 
     @property
-    def make_df(self):
+    def make_df(self) -> pd.DataFrame:
         record_df = pd.DataFrame({"b_size": self.b_size,
                                   "g_type": self.g_type,
                                   "start_fig": self.start_fig,
                                   "win_fig": self.win_fig})
         return record_df
 
+    @staticmethod
+    def make_empty_df() -> pd.DataFrame:
+        empty_df = pd.DataFrame({"b_size": [0],
+                                 "g_type": ['empty'],
+                                 "start_fig": ['empty'],
+                                 "win_fig": ['empty']})
+        return empty_df
+
 
 class GameHistoryFileManagement:
 
     def __init__(self, name: str = '../game_history.csv'):
-        self.open_file(name)
-        self.history: pd.DataFrame = pd.read_csv(name)
+        self.history: pd.DataFrame = self.try_history(name)
+        self.create_new_file(name=name, df=self.history)
 
     @staticmethod
-    def open_file(name: str = '../game_history.csv') -> bool:
-        file = pd.read_csv(name)
-        if file is None:
-            heads = pd.DataFrame({"b_size": None, "g_type": None,
-                                  "start_fig": None, "win_fig": None})
-            heads.to_csv(index=False)
-        return True
+    def create_new_file(name, df: pd.DataFrame):
+        df.to_csv(name, index=False)
+        pass
+
+    @staticmethod
+    def try_history(name: str) -> pd.DataFrame:
+        try:
+            return pd.read_csv(name)
+        except FileNotFoundError:
+            return GameHistoryFileManagement.make_empty_history()
+
+    @staticmethod
+    def make_empty_history() -> pd.DataFrame:
+        return Record.make_empty_df()
 
     def print_to_console(self, beg: int = 0, end: int = -1):
         print(self.history.iloc[beg:end])
@@ -43,3 +58,8 @@ class GameHistoryFileManagement:
     def add_record(self, new_record: Record = Record()):
         self.history.append(new_record, ignore_index=True)
         pass
+
+
+h = GameHistoryFileManagement()
+
+h.print_to_console()
