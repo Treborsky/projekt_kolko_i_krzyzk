@@ -11,6 +11,7 @@ pygame.font.init()
 def sciezka_do_img(plik):
     return os.path.abspath(os.path.join("./img/", plik))
 
+
 # okno gry
 scr_width = 800
 scr_hight = 600
