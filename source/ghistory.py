@@ -24,8 +24,18 @@ class Record:
 
 class GameHistoryFileManagement:
 
-    def __init__(self):
-        self.history = pd.read_csv("../game_history.csv")
+    def __init__(self, name: str = '../game_history.csv'):
+        self.open_file(name)
+        self.history: pd.DataFrame = pd.read_csv(name)
+
+    @staticmethod
+    def open_file(name: str = '../game_history.csv') -> bool:
+        file = pd.read_csv(name)
+        if file is None:
+            heads = pd.DataFrame({"b_size": None, "g_type": None,
+                                  "start_fig": None, "win_fig": None})
+            heads.to_csv(index=False)
+        return True
 
     def print_to_console(self, beg: int = 0, end: int = -1):
         print(self.history.iloc[beg:end])
