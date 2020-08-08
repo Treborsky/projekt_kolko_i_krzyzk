@@ -23,6 +23,7 @@ scr_width = 800
 scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
 win = pygame.image.load(buttons.sciezka_do_img('back_tic_tac_toe.png'))
+hist_win = pygame.image.load(buttons.sciezka_do_img('back_game_history.png'))
 
 
 # grafika planszy
@@ -53,9 +54,6 @@ def game_intro(void=None):
     def void_action(empty=None):
         pass
 
-    def show_games(empty=None):
-        pass
-
     while intro:
         quit_program()
 
@@ -64,7 +62,7 @@ def game_intro(void=None):
         button1 = buttons.Button(290, 220, 210, 60, 'Normal', game_menu, 1)
         button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', game_menu, 2)
         button3 = buttons.Button(290, 380, 210, 60, 'Game time', game_menu, 3)
-        button4 = buttons.Button(290, 460, 210, 60, 'Game history', show_games)
+        button4 = buttons.Button(290, 460, 210, 60, 'Game history', game_history, True)
         button5 = buttons.Button(290, 540, 210, 60, 'Exit', void_action)
 
         intro = not (button1.button_down or button2.button_down or button3.button_down or button5.button_down)
@@ -138,13 +136,10 @@ def plansza(size: int = None, g_type: int = None):
                         board.computers_move()
 
                     elif winner == 1:
-                        print("wygrały kółka")
-                        game=False
+                        game = False
                     elif winner == -1:
-                        print("wygrały krzyżyki")
-                        game=False
+                        game = False
                     elif winner == 0 and len(board.figure_list) == size*size:
-                        print("remis")
                         game = False
 
             if event.type == pygame.QUIT:
@@ -163,14 +158,54 @@ def plansza(size: int = None, g_type: int = None):
             screen.blit(text, [30, 50])
             if elapsed_time > time_limit:
                 print("Game over")
-                game_intro()
+                game = False
 
         pygame.display.update()
         clock.tick(100)
 
     board.save_game(g_type)
+    board.empty_elements_list()
+    pass
 
-    game_intro()
+
+def game_history(open_game_hist=False) -> None:
+    ghist = open_game_hist
+    history = gh.GameHistoryFileManagement()
+
+    def empty_func(empty=None):
+        pass
+
+    all_games = history.history_as_numpy_record_array()
+    all_games = all_games[-24:]
+    raw_text = history.header_string
+    text = font.render(raw_text, True, white)
+
+    record_font = pygame.font.Font(None, 28)
+
+    while ghist:
+        coords = [20, 20]
+        quit_program()
+
+        screen.blit(hist_win, (0, 0))
+
+        # here print in text the records form csv file
+        screen.blit(text, coords)
+        coords[1] += 20
+        for record in all_games:
+            gnumber, gsize, gtype, sfig, wfig = record
+            raw_record: str = str(gnumber) + '   ' + str(int(gsize)) + '      ' \
+                + str(gtype) + '               ' + str(sfig) + '                            ' + str(wfig)
+            formatted = record_font.render(raw_record, True, white)
+            screen.blit(formatted, coords)
+            coords[1] += 20
+
+        button1 = buttons.Button(550, 540, 210, 60, 'Return', empty_func)
+
+        ghist = not button1.button_down
+
+        pygame.display.update()
+        clock.tick(20)
+
     pass
 
 
