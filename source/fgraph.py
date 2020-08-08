@@ -4,6 +4,7 @@
 from typing import List, Tuple
 from source import comp
 from source import ghistory as gh
+import pandas
 
 x3_dimensions__: List[Tuple[int, int]] = [(146, 314), (326, 473), (487, 651)]
 y3_dimensions__: List[Tuple[int, int]] = [(107, 234), (245, 354), (365, 493)]
@@ -104,19 +105,26 @@ class Board:    # TODO: exception handling ground-up
             self.update_elements(i=raw_move[0], j=raw_move[1])
             self.state = not self.state
 
-    def save_game(self, gtype: int = 1):
-        board_size = self.size
-        game_type = self.game_type_str(gtype)
+    def save_game(self, gtype: int = 1) -> None:
+        board_size_i = self.size
+        game_type_s = self.game_type_str(gtype)
 
         last_position = self.get_last_coordinates
         winning_int = self.matrix[last_position[0]][last_position[1]]
-        winning_figure: str = self.figure_str(winning_int)
+        win_figure: str = self.figure_str(winning_int)
 
         first_move = self.figure_list[0][1]
-        starting_int = self.matrix[first_move[0]][first_move[1]]
-        starting_figure: str = self.figure_str(starting_int)
+        starting_int = self.matrix[self.translate_pos(first_move[0], first_move[1])[0]][self.translate_pos(first_move[0], first_move[1])[1]]
+        start_figure: str = self.figure_str(starting_int)
 
-        return gh.Record(board_size, game_type, starting_figure, winning_figure).make_df()
+        game_to_save = gh.Record(board_size=board_size_i, game_type=game_type_s, starting_figure=start_figure,
+                                 winning_figure=win_figure)
+        # do tego miejsca jest dobrze
+
+        game_history = gh.GameHistoryFileManagement(name='game_history.csv')
+        game_history.add_record(new_record=game_to_save.dicttype)
+        game_history.save_to_file(game_history.history)
+        pass
 
     @property
     def get_elements(self) -> List:

@@ -5,7 +5,7 @@ import pygame
 import sys
 import time
 from source import fgraph, buttons, game_end, CheckMate
-
+from source import ghistory as gh
 
 pygame.init()
 
@@ -53,6 +53,9 @@ def game_intro(void=None):
     def void_action(empty=None):
         pass
 
+    def show_games(empty=None):
+        pass
+
     while intro:
         quit_program()
 
@@ -61,9 +64,10 @@ def game_intro(void=None):
         button1 = buttons.Button(290, 220, 210, 60, 'Normal', game_menu, 1)
         button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', game_menu, 2)
         button3 = buttons.Button(290, 380, 210, 60, 'Game time', game_menu, 3)
-        button4 = buttons.Button(290, 460, 210, 60, 'Exit', void_action)
+        button4 = buttons.Button(290, 460, 210, 60, 'Game history', show_games)
+        button5 = buttons.Button(290, 540, 210, 60, 'Exit', void_action)
 
-        intro = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
+        intro = not (button1.button_down or button2.button_down or button3.button_down or button5.button_down)
 
         pygame.display.update()
         clock.tick(20)
@@ -135,12 +139,13 @@ def plansza(size: int = None, g_type: int = None):
 
                     elif winner == 1:
                         print("wygrały kółka")
-                        break
+                        game=False
                     elif winner == -1:
                         print("wygrały krzyżyki")
-                        break
+                        game=False
                     elif winner == 0 and len(board.figure_list) == size*size:
                         print("remis")
+                        game = False
 
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -162,6 +167,8 @@ def plansza(size: int = None, g_type: int = None):
 
         pygame.display.update()
         clock.tick(100)
+
+    board.save_game(g_type)
 
     game_intro()
     pass
