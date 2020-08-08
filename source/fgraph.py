@@ -18,12 +18,13 @@ y5_dimensions__: List[Tuple[int, int]] = [(17, 118), (129, 227), (239, 338), (34
 
 class Board:    # TODO: exception handling ground-up
 
-    figure_list: List = []
-
     def __init__(self, n):
         self.state: bool = False
         self.matrix: List[List[int]] = [[0 for x in range(0, n)] for y in range(0, n)]
         self.size: int = n
+        self.figure_list: List = []
+        self.first_figure = 'x'
+        self.last_figure = None
         self.x_dimensions__: List[Tuple[int, int]] = []
         self.y_dimensions__: List[Tuple[int, int]] = []
         if n == 3:
@@ -52,6 +53,7 @@ class Board:    # TODO: exception handling ground-up
         elif f == -1:
             return 'x'
 
+
     def translate_pos(self, x_mouse_position, y_mouse_position) -> Tuple[int, int]:
         # translates the x-y position of the mouse into x,y coordinates on the backend 3x3 matrix
         x = -1
@@ -74,11 +76,14 @@ class Board:    # TODO: exception handling ground-up
 
     def update_elements(self, i, j) -> None:
         # updates the matrix and adds the new figure to the list of figures for display
+
         if self.matrix[i][j] == 0:
             if self.state is True:
                 self.matrix[i][j] = 1
+                self.last_figure = 1
             elif self.state is False:
                 self.matrix[i][j] = -1
+                self.last_figure = -1
         #else:
             #raise ValueError("already filled")
         else:
@@ -87,6 +92,10 @@ class Board:    # TODO: exception handling ground-up
             self.figure_list += [(self.matrix[i][j], self.re_translate_pos(i, j))]
         #else:
             #raise IndexError("plansza pelna")
+        pass
+
+    def empty_elements_list(self):
+        self.figure_list = []
         pass
 
     def add_figure(self, x_mouse_position, y_mouse_position) -> None:
@@ -109,13 +118,12 @@ class Board:    # TODO: exception handling ground-up
         board_size_i = self.size
         game_type_s = self.game_type_str(gtype)
 
-        last_position = self.get_last_coordinates
-        winning_int = self.matrix[last_position[0]][last_position[1]]
-        win_figure: str = self.figure_str(winning_int)
+        # start_figure, win_figure has to be calculated here somewhere aqui no sE :(
 
-        first_move = self.figure_list[0][1]
-        starting_int = self.matrix[self.translate_pos(first_move[0], first_move[1])[0]][self.translate_pos(first_move[0], first_move[1])[1]]
-        start_figure: str = self.figure_str(starting_int)
+        start_figure = self.first_figure
+        win_figure = self.figure_str(self.last_figure)
+        if len(self.figure_list) == self.size*self.size:
+            win_figure = 'tie'
 
         game_to_save = gh.Record(board_size=board_size_i, game_type=game_type_s, starting_figure=start_figure,
                                  winning_figure=win_figure)
