@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from typing import Optional
 
 import pandas as pd
 
@@ -33,8 +34,10 @@ class Record:
 class GameHistoryFileManagement:
 
     def __init__(self, name: str = 'game_history.csv'):
-        self.history: pd.DataFrame = self.try_history(name)  # czy to wogóle działa?
+        self.history: pd.DataFrame = self.try_history(name)
         self.name = name
+        self.rarray_history = self.history.to_records()
+        self.header_string = "#  size  type  starting figure  winning figure"
 
     @staticmethod
     def save_to_file(df: pd.DataFrame):
@@ -58,3 +61,7 @@ class GameHistoryFileManagement:
     def add_record(self, new_record: pd.DataFrame):
         self.history = self.history.append(new_record, ignore_index=True)
         pass
+
+    def history_as_numpy_record_array(self, record_no=0):
+        s_history = self.rarray_history
+        return s_history
