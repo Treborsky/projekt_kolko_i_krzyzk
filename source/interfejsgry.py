@@ -43,6 +43,10 @@ circlesource = pygame.image.load("Plansze/o_3x3.png")
 # nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
+# grafika wygranej i przegranej
+win_end_screen = pygame.image.load("./Plansze/endgame_2.png")
+lose_end_screen = pygame.image.load("./Plansze/endgame_1.png")
+
 clock = pygame.time.Clock()
 white = (255, 255, 255)
 font = pygame.font.Font(None, 30)
@@ -108,6 +112,7 @@ def game_menu(g_type: int = None):
 def plansza(size: int = None, g_type: int = None):
     game = True
 
+    winner = None
     board = fgraph.Board(size)
     start_time = time.time()
 
@@ -148,7 +153,7 @@ def plansza(size: int = None, g_type: int = None):
                 sys.exit()
 
         if g_type == 3:
-            time_limit = 5
+            time_limit = 1
 
             elapsed_time = time.time() - start_time
             timer = time_limit - int(elapsed_time)
@@ -157,13 +162,12 @@ def plansza(size: int = None, g_type: int = None):
 
             screen.blit(text, [30, 50])
             if elapsed_time > time_limit:
-                print("Game over")
                 game = False
 
         pygame.display.update()
         clock.tick(100)
 
-    board.save_game(g_type)
+    board.save_game(g_type, winner)
     board.empty_elements_list()
     pass
 
