@@ -41,10 +41,6 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
 
     def move_marking(poz_x, poz_y, mark, matrix, n):
 
-        # matrix = inverse_entrance_transformation(matrix)
-
-         # matrix = inverse_entrance_transformation(matrix)
-
         if matrix[poz_x % n][poz_y % n] == 0:
             # print(poz_x, poz_y)
             # print(matrix)
