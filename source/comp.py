@@ -311,11 +311,11 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(mark,
+            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(-mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(-mark,
+            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(mark,
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
@@ -323,7 +323,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(-mark,
+            if how_much(-mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         return random_move(matrix, mark, 5)
