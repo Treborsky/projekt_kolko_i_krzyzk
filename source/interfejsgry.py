@@ -3,8 +3,9 @@
 
 import pygame
 import sys
+import time
 from source import fgraph, buttons, game_end, CheckMate
-
+from source import ghistory as gh
 
 pygame.init()
 
@@ -22,6 +23,7 @@ scr_width = 800
 scr_hight = 600
 screen = pygame.display.set_mode((scr_width, scr_hight))
 win = pygame.image.load(buttons.sciezka_do_img('back_tic_tac_toe.png'))
+hist_win = pygame.image.load(buttons.sciezka_do_img('back_game_history.png'))
 
 
 # grafika planszy
@@ -41,34 +43,48 @@ circlesource = pygame.image.load("Plansze/o_3x3.png")
 # nazwa okna gry
 pygame.display.set_caption("Tic Tac Toe")
 
+# grafika wygranej i przegranej
+win_end_screen = pygame.image.load("./Plansze/endgame_2.png")
+lose_end_screen = pygame.image.load("./Plansze/endgame_1.png")
+
 clock = pygame.time.Clock()
+white = (255, 255, 255)
+font = pygame.font.Font(None, 30)
 
 
-# ekran główny
-def game_intro(void = None):
+def game_intro(void=None):
     intro = True
+
+    def void_action(empty=None):
+        pass
 
     while intro:
         quit_program()
 
         screen.blit(win, (0, 0))
 
-        button1 = buttons.Button(290, 220, 210, 60, '3x3', game_menu, 3)
-        button2 = buttons.Button(290, 300, 210, 60, '4x4', game_menu, 4)
-        button3 = buttons.Button(290, 380, 210, 60, '5x5', game_menu, 5)
-        button4 = buttons.Button(290, 460, 210, 60, 'Exit', sys.exit)
+        button1 = buttons.Button(290, 220, 210, 60, 'Normal', game_menu, 1)
+        button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', game_menu, 2)
+        button3 = buttons.Button(290, 380, 210, 60, 'Game time', game_menu, 3)
+        button4 = buttons.Button(290, 460, 210, 60, 'Game history', game_history, True)
+        button5 = buttons.Button(290, 540, 210, 60, 'Exit', void_action)
 
-        intro = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
+        intro = not (button1.button_down or button2.button_down or button3.button_down or button5.button_down)
 
         pygame.display.update()
-        clock.tick(100)
+        clock.tick(20)
+
+    return intro
     pass
 
 
-def game_menu(size: int = None):
+def game_menu(g_type: int = None):
 
-    def start(g_type: int = None):
-        plansza(size, g_type)
+    def start(size: int = None):
+        return plansza(size, g_type)
+
+    def to_intro(empty=None):
+        pass
 
     run = True
 
@@ -79,22 +95,26 @@ def game_menu(size: int = None):
 
         screen.blit(win, (0, 0))
 
-        button1 = buttons.Button(290, 220, 210, 60, 'Normal', start, 1)
-        button2 = buttons.Button(290, 300, 210, 60, 'Play with computer', start, 2)
-        button3 = buttons.Button(290, 380, 210, 60, 'Game time', start, 3)
-        button4 = buttons.Button(290, 460, 210, 60, 'Return', game_intro)
+        button1 = buttons.Button(290, 220, 210, 60, '3x3', start, 3)
+        button2 = buttons.Button(290, 300, 210, 60, '4x4', start, 4)
+        button3 = buttons.Button(290, 380, 210, 60, '5x5', start, 5)
+        button4 = buttons.Button(290, 460, 210, 60, 'Return', to_intro)
 
         run = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
 
         pygame.display.update()
-        clock.tick(100)
+        clock.tick(20)
+
+    return game_intro()
     pass
 
 
 def plansza(size: int = None, g_type: int = None):
     game = True
 
+    winner = None
     board = fgraph.Board(size)
+    start_time = time.time()
 
     while game:
 
@@ -106,42 +126,96 @@ def plansza(size: int = None, g_type: int = None):
             if figure[0] == -1:
                 screen.blit(pygame.transform.scale(crosssource, (87, 87)), figure[1])
 
-        # event handling
         for event in pygame.event.get():
-            # interfacing with the board
+
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 pos = pygame.mouse.get_pos()
 
                 if event.button == 1:
-                    board.add_figure(pos[0], pos[1])                                # here adding a new cross/circle
+                    board.add_figure(pos[0], pos[1])
 
-                    if g_type == 2:                                                 # here optional computer move mordo
-                        board.computers_move()
-
-                    #winner = game_end.ChekingBoard(board=board.matrix, size=size).check()  # here checking for a win
                     winner = CheckMate.GameCheck(board=board.matrix, size=size).check()
 
-                    if winner == 1:                                                 # TODO: rewrite it's ugly
-                        print("wygrały kółka")                                      # TODO: exception handling mordo
-                        break
-                    elif winner == -1:
-                        print("wygrały krzyżyki")
-                        break
+                    if g_type == 2 and winner != 1 and winner != -1:
+                        board.computers_move()
 
-            if event.type == pygame.QUIT:                                           # here checking for a quit event
+                    elif winner == 1:
+                        game = False
+                    elif winner == -1:
+                        game = False
+                    elif winner == 0 and len(board.figure_list) == size*size:
+                        game = False
+
+            if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
 
+        if g_type == 3:
+            time_limit = 1
+
+            elapsed_time = time.time() - start_time
+            timer = time_limit - int(elapsed_time)
+            output_string = "Time left: 0:{0:02}".format(timer)
+            text = font.render(output_string, True, white)
+
+            screen.blit(text, [30, 50])
+            if elapsed_time > time_limit:
+                game = False
+
         pygame.display.update()
         clock.tick(100)
 
-    game_menu(size)
+    board.save_game(g_type, winner)
+    board.empty_elements_list()
+    pass
+
+
+def game_history(open_game_hist=False) -> None:
+    ghist = open_game_hist
+    history = gh.GameHistoryFileManagement()
+
+    def empty_func(empty=None):
+        pass
+
+    all_games = history.history_as_numpy_record_array()
+    all_games = all_games[-24:]
+    raw_text = history.header_string
+    text = font.render(raw_text, True, white)
+
+    record_font = pygame.font.Font(None, 28)
+
+    while ghist:
+        coords = [20, 20]
+        quit_program()
+
+        screen.blit(hist_win, (0, 0))
+
+        # here print in text the records form csv file
+        screen.blit(text, coords)
+        coords[1] += 20
+        for record in all_games:
+            gnumber, gsize, gtype, sfig, wfig = record
+            raw_record: str = str(gnumber) + '   ' + str(int(gsize)) + '      ' \
+                + str(gtype) + '               ' + str(sfig) + '                            ' + str(wfig)
+            formatted = record_font.render(raw_record, True, white)
+            screen.blit(formatted, coords)
+            coords[1] += 20
+
+        button1 = buttons.Button(550, 540, 210, 60, 'Return', empty_func)
+
+        ghist = not button1.button_down
+
+        pygame.display.update()
+        clock.tick(20)
+
     pass
 
 
 # mian loop
 def main_loop():
-    game_intro()
+    play = True
+    while play:
+        play = game_intro()
     sys.exit()
