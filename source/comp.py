@@ -2,18 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from typing import Tuple
-import random
-
-
-# import numpy as np
+from random import choice
 
 
 def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
-    # def start_game(n):
-    #     A = ([[0] * (n)] * (n))
-    #     return A
-    # board_arr = np.array(board)
-    # board_transposed = np.transpose(board_arr)
+    # ogólny zamysł programu grającego: plansza zostaje podzielona na listę list (funkcja order), w których może
+    # nastąpić wygrana, potem wyszukiwana jest lista do optymalnego ruchu (eg wygrana, blokada wygranej przeciwnika)
+    # na koniec stosowna funkcja heart wyszukuje miejsce na planszy w które można wpisać nową figurę i zleca ruch
+
     def mark_conversion(mark_boolean):
         if mark_boolean:
             mark_int = 1
@@ -21,35 +17,13 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             mark_int = -1
         return mark_int
 
-    # def entrance_transformation(matrix):
-    #     result_list = []
-    #     for i in range(3):
-    #         support_list = []
-    #         for j in range(3):
-    #             support_list.append(matrix[j][i])
-    #         result_list.append(support_list)
-    #     return result_list
-    #
-    # def inverse_entrance_transformation(matrix):
-    #     result_list = []
-    #     for i in range(3):
-    #         support_list = []
-    #         for j in range(3):
-    #             support_list.append(matrix[j][i])
-    #         result_list.append(support_list)
-    #     return result_list
-
     def move_marking(poz_x, poz_y, mark, matrix, n):
-
         if matrix[poz_x % n][poz_y % n] == 0:
-            # print(poz_x, poz_y)
-            # print(matrix)
             return poz_x % n, poz_y % n
         else:
-            # return random_move(inverse_entrance_transformation(matrix), mark)
             return random_move(matrix, mark, n)
 
-    def order(matrix):
+    def order(matrix):  # zamiana planszy na liste list, ma usprawniać odczytywanie planszy i możliwych wygranych
         n = len(matrix)
         result_list = []
 
@@ -73,7 +47,6 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
         support_list = []
         for i in range(n):
             support_list.append(matrix[i][n - 1 - i])
-        # q = [matrix[0][2], matrix[1][1], matrix[2][0]]
         result_list.append(support_list)
 
         if n == 4:
@@ -105,29 +78,6 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
 
         return result_list
 
-    # def order_new(matrix):
-    #     result_list = []
-    #     for j in range(3):
-    #         support_list = []
-    #         for i in range(3):
-    #             support_list.append(matrix[i][j])
-    #         result_list.append(support_list)
-    #     for i in range(3):
-    #         support_list = []
-    #         for j in range(3):
-    #             support_list.append(matrix[i][j])
-    #         result_list.append(support_list)
-    #     support_list = []
-    #     for i in range(3):
-    #         support_list.append(matrix[i][i])
-    #     result_list.append(support_list)
-    #     support_list = []
-    #     for i in range(3):
-    #         support_list.append(matrix[i][2 - i])
-    #     # q = [matrix[0][2], matrix[1][1], matrix[2][0]]
-    #     result_list.append(support_list)
-    #     return result_list
-
     def how_much(x, lst):
         s = 0
         for n in lst:
@@ -135,7 +85,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                 s += 1
         return s
 
-    def heart_3x3(i, matrix, mark):
+    def heart_3x3(i, matrix, mark):  # serce gry, funkcja zlecająca ruch w wolne pole
         ordered_list = order(matrix)
         if 0 <= i < 3:
             for j in range(3):
@@ -177,29 +127,25 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                 if ordered_list[i][j] == 0:
                     return move_marking((i-10) // 3 + j//2, (i-10) % 3 + j % 2, mark, matrix, 4)
 
-    # def in_a_row_move(i, line, matrix, mark):
-    #     for j in range(5):
-    #         if line[j] == -1:
-    #             if line[j - 1] == 0:
-    #                 return move_marking(i, j, mark, matrix, 5)
-    tricky_five_list = [2, 1, 3, 0, 4]
+    def tricky_five_list():  # proste rozwiązanie problemu wpisywania wygrywających kombinacji w planszy 5x5
+        return [2, 1, 3, 0, 4]
 
     def heart_5x5(i, matrix, mark):
         ordered_list = order(matrix)
         if 0 <= i < 5:
-            for j in tricky_five_list:
+            for j in tricky_five_list():
                 if ordered_list[i][j] == 0:
                     return move_marking(i, j, mark, matrix, 5)
         elif 5 <= i < 10:
-            for j in tricky_five_list:
+            for j in tricky_five_list():
                 if ordered_list[j][i % 5] == 0:
                     return move_marking(j, i % 5, mark, matrix, 5)
         elif i == 10:
-            for j in tricky_five_list:
+            for j in tricky_five_list():
                 if ordered_list[i][j] == 0:
                     return move_marking(j, j, mark, matrix, 5)
         elif i == 11:
-            for j in tricky_five_list:
+            for j in tricky_five_list():
                 if ordered_list[i][j] == 0:
                     return move_marking(j, 4 - j, mark, matrix, 5)
         elif i == 12:
@@ -219,27 +165,6 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                 if ordered_list[i][j] == 0:
                     return move_marking(j + 1, 4 - j, mark, matrix, 5)
 
-    # def heart_new(i, matrix, mark):
-    #     ordered_list = order(matrix)
-    #     if 1 <= i < 3:
-    #         for j in range(3):
-    #             if ordered_list[j][i % 3] == 0:
-    #                 return move_marking(j, i % 3, mark, matrix)
-    #     elif 3 <= i < 6:
-    #         for j in range(3):
-    #             if ordered_list[i][j] == 0:
-    #                 return move_marking(j, i, mark, matrix)
-    #     elif i == 6:
-    #         for j in range(3):
-    #             if ordered_list[i][j] == 0:
-    #                 return move_marking(j, j, mark, matrix)
-    #     elif i == 7:
-    #         for j in range(3):
-    #             if ordered_list[i][j] == 0:
-    #                 return move_marking(j, 2 - j, mark, matrix)
-
-    # def rd():
-    #     return random.choice([0, 1, 2])
     def random_move(matrix, mark, n):
         result_list = []
         for i in range(n):
@@ -247,16 +172,16 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                 if matrix[i][j] == 0:
                     result_list.append((i, j))
         if result_list is None:
-            return
+            return #TODO: JAKIŚ ERROR?
         else:
-            move_tuple = random.choice(result_list)
+            move_tuple = choice(result_list)
             x = move_tuple[0]
             y = move_tuple[1]
             return move_marking(x, y, mark, matrix, n)
 
     def comp_move_3x3(matrix, mark):
         ordered_list = order(matrix)
-        print(ordered_list)
+
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 1:
                 return heart_3x3(i, matrix, mark)
@@ -270,7 +195,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
 
     def comp_move_4x4(matrix, mark):
         ordered_list = order(matrix)
-        print(ordered_list)
+
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) == 1:
                 return heart_4x4(i, matrix, mark)
@@ -278,10 +203,10 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             if how_much(-mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) == 1:
                 return heart_4x4(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
+            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
                 return heart_4x4(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
+            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) == 2:
                 return heart_4x4(i, matrix, mark)
         for i in range(len(ordered_list)):
             if how_much(mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) == 3:
@@ -291,39 +216,39 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
                 return heart_4x4(i, matrix, mark)
         return random_move(matrix, mark, 4)
 
-    def free_row(mark, ordered_list) -> bool:
-        if len(ordered_list) == 5:
+    # funkcja sprawdzająca czy w zadanym rzędzie istnieje konfiguracja wygrywająca dla figury mark
+    def free_row(mark, row) -> bool:
+        if len(row) == 5:
             for i in (1, 2, 3):
-                if ordered_list[i] == mark:
+                if row[i] == -mark:
                     return False
         return True
 
     def comp_move_5x5(matrix, mark):
         ordered_list = order(matrix)
-        print(ordered_list)
 
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(-mark,
+            if how_much(mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(mark,
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(mark,
+            if how_much(-mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(-mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(-mark,
+            if how_much(mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(mark,
+            if how_much(-mark, ordered_list[i]) == 2 and how_much(0, ordered_list[i]) > 1 and free_row(-mark,
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(-mark,
+            if how_much(mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(mark,
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(mark,
+            if how_much(-mark, ordered_list[i]) == 1 and how_much(0, ordered_list[i]) > 2 and free_row(-mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         return random_move(matrix, mark, 5)
@@ -338,7 +263,5 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             return comp_move_4x4(matrix, mark_int)
         elif size == 5:
             return comp_move_5x5(matrix, mark_int)
-
-    # return comp_move_3x3(entrance_transformation(board), mark_int)
 
     return very_decision(board, mark_bool)
