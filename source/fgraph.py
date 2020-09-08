@@ -17,7 +17,7 @@ x5_dimensions__: List[Tuple[int, int]] = [(124, 225), (236, 331), (342, 438), (4
 y5_dimensions__: List[Tuple[int, int]] = [(17, 118), (129, 227), (239, 338), (349, 447), (459, 561)]
 
 
-class Board:    # TODO: exception handling ground-up
+class Board:
 
     def __init__(self, n):
         self.state: bool = False
@@ -61,9 +61,9 @@ class Board:    # TODO: exception handling ground-up
         x = -1
         y = -1
         for i in range(0, self.size):
-            if self.x_dimensions__[i][0] < x_mouse_position < self.x_dimensions__[i][1]:
+            if self.x_dimensions__[i][0] <= x_mouse_position <= self.x_dimensions__[i][1]:
                 x = i
-            if self.y_dimensions__[i][0] < y_mouse_position < self.y_dimensions__[i][1]:
+            if self.y_dimensions__[i][0] <= y_mouse_position <= self.y_dimensions__[i][1]:
                 y = i
         if x == -1 or y == -1:
             print("nice man")
@@ -110,6 +110,14 @@ class Board:    # TODO: exception handling ground-up
          #   raise ValueError(error)
         pass
 
+    def remove_last_figure(self):
+        coords = self.get_last_coordinates
+        print(coords)
+        self.matrix[coords[0]][coords[1]] = 0
+        self.figure_list.pop()
+        print(self.matrix)
+        pass
+
     def computers_move(self) -> None:
         raw_move = comp.computer_move(self.matrix, self.state)
         if raw_move is not None:
@@ -143,7 +151,6 @@ class Board:    # TODO: exception handling ground-up
     @property
     def get_last_coordinates(self) -> Tuple[int, int]:
         # returns the last coordinates the were updated
-        last_update = self.figure_list[-1]
-        last_graphic_pos = last_update[1]
-        coords = self.translate_pos(last_graphic_pos[0], last_graphic_pos[1])
+        last_saved_chords = self.figure_list[-1][1]
+        coords = self.translate_pos(last_saved_chords[0], last_saved_chords[1])
         return coords

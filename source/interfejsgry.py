@@ -72,7 +72,7 @@ def game_intro(void=None):
         intro = not (button1.button_down or button2.button_down or button3.button_down or button5.button_down)
 
         pygame.display.update()
-        clock.tick(20)
+        clock.tick(100)
 
     return intro
     pass
@@ -103,7 +103,7 @@ def game_menu(g_type: int = None):
         run = not (button1.button_down or button2.button_down or button3.button_down or button4.button_down)
 
         pygame.display.update()
-        clock.tick(20)
+        clock.tick(100)
 
     return game_intro()
     pass
@@ -115,6 +115,14 @@ def plansza(size: int = None, g_type: int = None):
     winner = None
     board = fgraph.Board(size)
     start_time = time.time()
+
+    def reverse_move(nada=None):
+        if g_type != 2:
+            board.remove_last_figure()
+        else:
+            board.remove_last_figure()
+            board.remove_last_figure()
+        pass
 
     while game:
 
@@ -146,6 +154,9 @@ def plansza(size: int = None, g_type: int = None):
                         game = False
                     elif winner == 0 and len(board.figure_list) == size*size:
                         game = False
+
+            if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+                reverse_move()
 
             if event.type == pygame.QUIT:
                 sys.exit()
