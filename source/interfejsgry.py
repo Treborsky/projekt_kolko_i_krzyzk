@@ -224,7 +224,7 @@ def game_history(open_game_hist=False) -> None:
     pass
 
 
-# mian loop
+# main loop
 def main_loop():
     play = True
     while play:
