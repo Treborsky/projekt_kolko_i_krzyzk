@@ -47,6 +47,15 @@ pygame.display.set_caption("Tic Tac Toe")
 win_end_screen = pygame.image.load("./Plansze/endgame_2.png")
 lose_end_screen = pygame.image.load("./Plansze/endgame_1.png")
 
+# countdown timer
+timer_font = pygame.font.SysFont('Consolas', 30)
+timer_sec_3 = 5
+timer_sec_4 = 15
+timer_sec_5 = 20
+timer_text_3 = timer_font.render("00:05", True, (255, 255, 255))
+timer_text_4 = timer_font.render("00:15", True, (255, 255, 255))
+timer_text_5 = timer_font.render("00:20", True, (255, 255, 255))
+
 clock = pygame.time.Clock()
 white = (255, 255, 255)
 font = pygame.font.Font(None, 30)
@@ -110,6 +119,7 @@ def game_menu(g_type: int = None):
 
 
 def plansza(size: int = None, g_type: int = None):
+    global timer_sec_5, timer_text_3, timer_text_4, timer_sec_3, timer_sec_4, timer_text_5
     game = True
 
     winner = None
@@ -123,6 +133,9 @@ def plansza(size: int = None, g_type: int = None):
             board.remove_last_figure()
             board.remove_last_figure()
         pass
+
+    timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(timer, 1000)
 
     while game:
 
@@ -162,18 +175,52 @@ def plansza(size: int = None, g_type: int = None):
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 sys.exit()
+            if g_type == 3:
+                if event.type == timer:
+                    if board.size == 3:
+                        if timer_sec_3 > 0:
+                            timer_sec_3 -= 1
+                            timer_text_3 = timer_font.render("00:%02d" % timer_sec_3, True, (255, 255, 255))
+                        elif timer_sec_3 == 0:
+                            board.empty_elements_list()
+                            timer_sec_3 = 5
+                            timer_text_3 = timer_font.render("00:%02d" % timer_sec_3, True, (255, 255, 255))
+                            game_intro()
+                        else:
+                            pygame.time.set_timer(timer, 0)
+                    if board.size == 4:
+                        if timer_sec_4 > 0:
+                            timer_sec_4 -= 1
+                            timer_text_4 = timer_font.render("00:%02d" % timer_sec_4, True, (255, 255, 255))
+                        elif timer_sec_4 == 0:
+                            board.empty_elements_list()
+                            timer_sec_4 = 10
+                            timer_text_4 = timer_font.render("00:%02d" % timer_sec_4, True, (255, 255, 255))
+                            game_intro()
+                        else:
+                            pygame.time.set_timer(timer, 0)
+                    if board.size == 5:
+                        if timer_sec_5 > 0:
+                            timer_sec_5 -= 1
+                            timer_text_5 = timer_font.render("00:%02d" % timer_sec_5, True, (255, 255, 255))
+                        elif timer_sec_5 == 0:
+                            board.empty_elements_list()
+                            timer_sec_5 = 10
+                            timer_text_5 = timer_font.render("00:%02d" % timer_sec_5, True, (255, 255, 255))
+                            game_intro()
+                        else:
+                            pygame.time.set_timer(timer, 0)
 
         if g_type == 3:
-            time_limit = 1
-
-            elapsed_time = time.time() - start_time
-            timer = time_limit - int(elapsed_time)
-            output_string = "Time left: 0:{0:02}".format(timer)
-            text = font.render(output_string, True, white)
-
-            screen.blit(text, [30, 50])
-            if elapsed_time > time_limit:
-                game = False
+            if board.size == 3:
+                screen.blit(timer_text_3, (32, 48))
+                pygame.display.update()
+            if board.size == 4:
+                screen.blit(timer_text_4, (32, 48))
+                pygame.display.update()
+            if board.size == 5:
+                screen.blit(timer_text_5, (32, 48))
+                pygame.display.update()
 
         pygame.display.update()
         clock.tick(100)
