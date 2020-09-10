@@ -162,10 +162,13 @@ def plansza(size: int = None, g_type: int = None):
                         board.computers_move()
 
                     elif winner == 1:
+                        print('wygrały kółka')
                         game = False
                     elif winner == -1:
+                        print('wygrały krzyżyki')
                         game = False
                     elif winner == 0 and len(board.figure_list) == size*size:
+                        print('remis')
                         game = False
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:

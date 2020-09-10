@@ -37,11 +37,11 @@ class GameCheck(object):
             # sprawdzanie numeru tury
             if self.nr_of_turn % 2 == 1:
                 if total == -size or total_2 == -size:
-                    print('wygraly krzyzyki')
+                    #print('wygraly krzyzyki')
                     return True  # funkcja zwraca True gdy wygrywa gracz krzyzyk
 
                 if total == size or total_2 == size:
-                    print('wygrały kółka')
+                    #print('wygrały kółka')
                     return False  # funkcja zwraca False gdy wygrywa kolko( I-tura: komputer)
 
             else:
