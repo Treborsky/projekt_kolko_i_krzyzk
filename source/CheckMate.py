@@ -37,9 +37,11 @@ class GameCheck(object):
             # sprawdzanie numeru tury
             if self.nr_of_turn % 2 == 1:
                 if total == -size or total_2 == -size:
+                    print('wygraly krzyzyki')
                     return True  # funkcja zwraca True gdy wygrywa gracz krzyzyk
 
                 if total == size or total_2 == size:
+                    print('wygrały kółka')
                     return False  # funkcja zwraca False gdy wygrywa kolko( I-tura: komputer)
 
             else:
@@ -233,29 +235,35 @@ class GameCheck(object):
             if GameCheck.rows(self) or GameCheck.column(self) or GameCheck.slant(self) or GameCheck.square(self):
                 self.nr_of_turn = self.nr_of_turn + 1
                 self.player_points = self.player_points + 1
+                #print('wygrały krzyżyki')
                 return -1  # wygrywa gracz ( I-tura: krzyzyk)
 
             elif ((GameCheck.rows(self) is False) or (GameCheck.column(self) is False) or (
                     GameCheck.slant(self) is False) or (GameCheck.square(self) is False)):
                 self.nr_of_turn = self.nr_of_turn + 1
                 self.comp_points = self.comp_points + 1
+                #print('wygrały kółka')
                 return 1  # wygrywa komp (I-tura: kolko)
 
             else:
                 self.nr_of_turn = self.nr_of_turn + 1
+                #print('remis')
                 return 0  # remis
         else:
             if GameCheck.rows(self) or GameCheck.column(self) or GameCheck.slant(self):
                 self.nr_of_turn = self.nr_of_turn + 1
                 self.player_points = self.player_points + 1
+                #print('wygrały krzyżyki')
                 return -1  # wygrywa gracz ( I-tura: krzyzyk)
 
             elif ((GameCheck.rows(self) is False) or (GameCheck.column(self) is False) or (
                     GameCheck.slant(self) is False)):
                 self.nr_of_turn = self.nr_of_turn + 1
                 self.comp_points = self.comp_points + 1
+                #print('wygrały kółka')
                 return 1  # wygrywa komp (I-tura: kolko)
 
             else:
                 self.nr_of_turn = self.nr_of_turn + 1
+                #print('remis')
                 return 0  # remis

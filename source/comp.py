@@ -226,11 +226,11 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
         ordered_list = order(matrix)
 
         for i in range(len(ordered_list)):
-            if how_much(mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(mark,
+            if how_much(mark, ordered_list[i]) >= 3 and how_much(0, ordered_list[i]) > 0 and free_row(mark,
                                                                                                       ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
-            if how_much(-mark, ordered_list[i]) == 3 and how_much(0, ordered_list[i]) > 0 and free_row(-mark,
+            if how_much(-mark, ordered_list[i]) >= 3 and how_much(0, ordered_list[i]) > 0 and free_row(-mark,
                                                                                                        ordered_list[i]):
                 return heart_5x5(i, matrix, mark)
         for i in range(len(ordered_list)):
