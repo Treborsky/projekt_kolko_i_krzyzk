@@ -46,6 +46,9 @@ pygame.display.set_caption("Tic Tac Toe")
 # grafika wygranej i przegranej
 win_end_screen = pygame.image.load("./Plansze/endgame_2.png")
 lose_end_screen = pygame.image.load("./Plansze/endgame_1.png")
+win_cross = pygame.image.load("./Plansze/cross_wins.png")
+win_circle = pygame.image.load("./Plansze/circle_wins.png")
+tie = pygame.image.load("./Plansze/tie.png")
 
 # countdown timer
 timer_font = pygame.font.SysFont('Consolas', 30)
@@ -163,12 +166,21 @@ def plansza(size: int = None, g_type: int = None):
 
                     elif winner == 1:
                         print('wygrały kółka')
+                        screen.blit(pygame.transform.scale(win_circle, (800, 600)), (0, 0))
+                        pygame.display.update()
+                        clock.tick(2)
                         game = False
                     elif winner == -1:
                         print('wygrały krzyżyki')
+                        screen.blit(pygame.transform.scale(win_cross, (800, 600)), (0, 0))
+                        pygame.display.update()
+                        clock.tick(2)
                         game = False
                     elif winner == 0 and len(board.figure_list) == size*size:
                         print('remis')
+                        screen.blit(pygame.transform.scale(tie, (800, 600)), (0, 0))
+                        pygame.display.update()
+                        clock.tick(2)
                         game = False
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
