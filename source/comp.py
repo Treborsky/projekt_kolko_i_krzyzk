@@ -171,9 +171,7 @@ def computer_move(board, mark_bool: bool) -> Tuple[int, int]:
             for j in range(n):
                 if matrix[i][j] == 0:
                     result_list.append((i, j))
-        if result_list is None:
-            return #TODO: JAKIŚ ERROR?
-        else:
+        if result_list is not None:
             move_tuple = choice(result_list)
             x = move_tuple[0]
             y = move_tuple[1]
