@@ -194,7 +194,7 @@ def plansza(size: int = None, g_type: int = None):
                             timer_text_4 = timer_font.render("00:%02d" % timer_sec_4, True, (255, 255, 255))
                         elif timer_sec_4 == 0:
                             board.empty_elements_list()
-                            timer_sec_4 = 10
+                            timer_sec_4 = 15
                             timer_text_4 = timer_font.render("00:%02d" % timer_sec_4, True, (255, 255, 255))
                             game_intro()
                         else:
@@ -205,7 +205,7 @@ def plansza(size: int = None, g_type: int = None):
                             timer_text_5 = timer_font.render("00:%02d" % timer_sec_5, True, (255, 255, 255))
                         elif timer_sec_5 == 0:
                             board.empty_elements_list()
-                            timer_sec_5 = 10
+                            timer_sec_5 = 20
                             timer_text_5 = timer_font.render("00:%02d" % timer_sec_5, True, (255, 255, 255))
                             game_intro()
                         else:
